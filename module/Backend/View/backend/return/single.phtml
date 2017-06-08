@@ -1,0 +1,43 @@
+<h2>Administer Return</h2>
+<p><a href="/admin/list/returns"><< View All Product Returns</a></p>
+<?php
+
+if (!is_null($return))
+{
+    ?>
+        <div class="return_info">
+            <p>User: <a href="/admin/user/single?id=<?php echo $return->getUser()->getId(); ?>"><?php echo $return->getUser()->getFirstName() . ' ' . $return->getUser()->getLastName(); ?></a></p>
+            <p>Order: <a href="/admin/order/single?id=<?php echo $return->getShopListElement()->getShopList()->getId(); ?>"><?php echo '#' . $return->getShopListElement()->getShopList()->getOrderNumber(); ?></a></p>
+            <p>Product: <a href="/admin/product/single?id=<?php echo $return->getShopListElement()->getSku()->getProduct()->getId(); ?>"><?php echo $return->getShopListElement()->getName(); ?></a></p>
+
+            <?php
+                $sku = $return->getShopListElement()->getSku();
+
+                // Load sku attributes
+                $soovs = $sku->getSkuOptionOptionValues();
+                if (count($soovs) > 0)
+                {
+                    echo "<ul class='product_attributes'>";
+                    foreach ($soovs as $soov)
+                    {
+                        $option_value_rel = $soov->getOptionOptionValue();
+                        echo "<li>".$option_value_rel->getOption()->getName().": ".$option_value_rel->getOptionValue()->getName()."</li>";
+                    }
+                    echo "</ul>";
+                }
+            ?>
+
+            <p>Date Created: <?php echo $return->getDateCreated()->format('m/d/Y'); ?></p>
+        </div>
+    <?php
+}
+
+$create_update->prepare();
+echo $this->form()->openTag($create_update);
+echo $this->formRow($create_update->get('customer_message'));
+echo $this->formRow($create_update->get('admin_message'));
+echo $this->formRow($create_update->get('status'));
+?>
+<input type="submit" value="Save Changes"/>
+<?php
+echo $this->form()->closeTag();

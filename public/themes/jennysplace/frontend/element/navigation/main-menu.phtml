@@ -1,0 +1,17 @@
+<?php
+/**
+ * @var \Library\Model\Page\Menu $main_navigation
+ * @var boolean $mobile;
+ */
+?>
+
+<ul <?php if (!empty($mobile) && $mobile == true): echo "class='nav navbar-nav'"; endif; ?>>
+    <?php if (count($main_navigation->getMenuItems()) > 0): ?>
+        <?php
+        foreach ($main_navigation->getMenuItems() as $menuItem)
+        {
+            echo "<li><a href='{$menuItem->getUrl()}'>{$menuItem->getLabel()}</a></li>";
+        }
+        ?>
+    <?php endif; ?>
+</ul>

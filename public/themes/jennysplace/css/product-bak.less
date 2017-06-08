@@ -1,0 +1,140 @@
+@import "include";
+
+h1
+{
+  margin-top: 0;
+  margin-bottom: 2px;
+  font-size: 22px;
+  font-weight: normal;
+  color: #656565;
+}
+
+h3
+{
+  color: #A2A2A2;
+  font-size: 11px;
+  margin-top: 3px;
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 7px;
+}
+
+div.product_img_sect
+{
+  max-width: 35%;
+  max-height: 330px;
+  margin-right: 20px;
+
+  div.no-photo
+  {
+    width: 280px;
+    height: 147px;
+    border: 1px solid #888888;
+    color: #868686;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    padding-top: 108px;
+    background-color: #F1F1F1;
+  }
+
+  img
+  {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+div.product_info_options
+{
+  font-size: 14px;
+  max-width: 370px;
+
+  div.price
+  {
+    margin-bottom: 7px;
+    font-size: 16px;
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 10px;
+
+    span.old-price
+    {
+      color: #808080;
+      font-size: 13px;
+      text-decoration: line-through;
+    }
+
+    span.current-price
+    {
+      color: green;
+    }
+  }
+
+  div.product_options
+  {
+    font-size: 12px;
+    border-bottom: 1px solid #cccccc;
+
+    h5
+    {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    div.product_option
+    {
+      margin-bottom: 11px;
+      margin-right: 13px;
+      border-right: 1px solid #cccccc;
+      padding-right: 15px;
+    }
+
+    div.product_option:last-of-type
+    {
+      padding: 0;
+      border: none;
+    }
+  }
+
+  div.product_qty
+  {
+    padding-top: 10px;
+    margin-bottom: 15px;
+  }
+
+  a.add-to-cart
+  {
+    display: block;
+    background-color: #487AA5;
+    .gradient(#487AA5, darken(#487AA5, 10));
+    color: white;
+    text-align: center;
+    padding: 5px 0px;
+    font-weight: bold;
+    border: 1px solid black;
+    border-radius: 4px;
+    width: 165px;
+  }
+}
+
+div.product_description
+{
+  margin-top: 25px;
+  border-top: 1px solid #cccccc;
+
+  h4
+  {
+    margin-top: 7px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    color: #a8a8a8;
+  }
+
+  p
+  {
+    margin: 0;
+    padding: 0;
+    color: black;
+    font-size: 13px;
+  }
+}

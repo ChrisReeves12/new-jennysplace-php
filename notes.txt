@@ -1,0 +1,9 @@
+Things To Do
+
+1. -More options available notification on product displays
+2. Move product calculate totals to service object
+3. Make script in discount a select menu
+4. Make sure global discounts are not combined with shop list discounts when multi discount option is off.
+5. Use plugins for query lists instead of database queries
+6. Update Goodybuy.com information
+7. -Remove weight, date ordered, total weight and status from invoice

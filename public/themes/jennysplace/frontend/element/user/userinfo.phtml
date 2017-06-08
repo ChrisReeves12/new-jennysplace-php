@@ -1,0 +1,35 @@
+<?php
+/**
+ * @var \Library\Form\User\CreateUpdate $create_update_form
+ */
+
+$create_update_form->prepare();
+echo $this->form()->openTag($create_update_form);
+echo $this->formRow($create_update_form->get('registration_csrf'));
+?>
+<div>
+
+</div>
+<div class="row">
+    <input type="hidden" name="task" value="create_update"/>
+    <div class="col-md-4">
+        <h4>Basic Information</h4>
+        <?php
+            echo $this->render('element/form/collection', ['element' => $create_update_form->get('basic_info')]);
+        ?>
+        <button class="hidden-xs hidden-sm btn btn-success" type="submit"><i class="fa fa-edit"></i> Submit</button>
+    </div>
+    <div class="col-md-4">
+        <h4>Billing Address</h4>
+        <?php
+            echo $this->render('element/form/collection', ['element' => $create_update_form->get('billing_address_info')]);
+        ?>
+    </div>
+    <div class="col-md-4">
+        <h4>Shipping Address <span style="font-size: 13px;">(if different than billing address)</span></h4>
+        <?php
+            echo $this->render('element/form/collection', ['element' => $create_update_form->get('shipping_address_info')]);
+        ?>
+        <button class="hidden-md hidden-lg btn btn-success" type="submit"><i class="fa fa-edit"></i> Submit</button>
+    </div>
+</div>

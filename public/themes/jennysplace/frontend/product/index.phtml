@@ -1,0 +1,120 @@
+<?php
+
+    $image_path = \Library\Service\Settings::get('image_path');
+?>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="breadcrumb-container"><?php echo $this->print_breadcrumb($this->layout()->breadcrumb_data); ?></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="product-photo-section">
+                    <div class="main-photo">
+                        <?php if (!empty($product->getDefaultImage())): ?>
+                        <a class="fancybox-effects-d" data-fancybox-group="gallery" title="<?php echo $product->getName(); ?>" href="<?php echo $image_path; ?>/product_images/<?php echo $product->getDefaultImage()->getUrl(); ?>">
+                            <img class="img-responsive" alt="<?php echo $product->getName(); ?>" src="<?php echo $image_path; ?>/product_images/<?php echo $product->getDefaultImage()->getUrl(); ?>"/>
+                        </a>
+                        <?php else: ?>
+                            <img class="img-responsive" alt="<?php echo $product->getName(); ?>" src="<?php echo $image_path; ?>/layout_images/no_photo.jpg"/>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <?php
+            if (!empty($extra_photos))
+            {
+                echo "<div class='extra-photos'>";
+                foreach ($extra_photos as $extra_photo)
+                {
+                    $image = $extra_photo->getImage();
+                    $url = "{$image_path}/product_images/" . $image->getUrl();
+                    ?>
+                    <div class="col-xs-3">
+                        <a class="fancybox-effects-d extra-photo" data-fancybox-group='gallery' href="<?php echo $url; ?>" class="extra-photo">
+                            <img src="<?php echo $url; ?>"/>
+                        </a>
+                    </div>
+                    <?php
+                }
+                echo "</div>";
+            }
+            ?>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <h2><?php echo $product->getName(); ?></h2>
+        <div class="product-code">Product Code: <?php echo $product->getProductCode(); ?></div>
+        <div class="price-status">
+            <table>
+                <?php if ($this->layout()->hide_prices == false): ?>
+                    <tr>
+                        <td>Your Price: </td>
+                        <td>
+                            <?php
+                            $discount_price = $product->getDiscountPrice();
+
+                            if (!empty($discount_price) && $discount_price > 0):
+                                ?>
+                                <span class="current-price">$<?php echo $discount_price; ?></span>
+                                <?php
+                            else:
+                                ?>
+                                <span class="current-price">$<?php echo $product->getBasePrice(); ?></span>
+                                <?php
+                            endif
+                            ?>
+                        </td>
+                    </tr>
+                <?php else: ?>
+                    <a class="login_notice" href="https://<?php echo $this->layout()->store_settings['site_url']; ?>/auth?whence=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>"><i class="fa fa-sign-in"></i> Sign In To See Price</a>
+                <?php endif; ?>
+                <tr>
+                    <td>Stock Status:</td>
+                    <td>
+                        <span class="product-status">
+                            <?php echo $product_status; ?>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="quantity">
+            Quantity: <select class="qty">
+                <?php
+                for ($count = 1; $count < 11; $count++)
+                {
+                    echo "<option>".$count."</option>";
+                }
+                ?>
+            </select>
+        </div>
+        <div class='product_select_options'>
+            <?php echo $this->print_product_options($option_value_map); ?>
+        </div>
+        <a href="" class="add-to-cart btn btn-danger" data-sku-id="<?php echo $sku_id; ?>" data-product-id="<?php echo $product->getId(); ?>">
+            <span class="fa fa-shopping-cart"></span> Add To Cart
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <?php
+        $description = $product->getDescription(); if (!empty($description)): ?>
+            <div class="description">
+                <h3>Product Description</h3>
+                <p><?php echo nl2br($product->getDescription()); ?></p>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+<script>
+    window.newjennysplace = window.newjennysplace || {};
+    window.newjennysplace.product = window.newjennysplace.product || {};
+    window.newjennysplace.product.id = <?php echo $product->getId(); ?>;
+    window.newjennysplace.product.name = '<?php echo $product->getName(); ?>'
+</script>

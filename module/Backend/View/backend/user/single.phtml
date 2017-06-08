@@ -1,0 +1,213 @@
+<h2>Administer User</h2>
+<p><a href="/admin/list/users"><< View All Users</a></p>
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#basic">Basic Information</a></li>
+    <li><a data-toggle="tab" href="#orders">Orders</a></li>
+    <?php
+    if (!empty($saved_cart))
+    {
+    ?>
+    <li><a data-toggle="tab" href="#saved_cart">Shopping Cart</a></li>
+    <?php } ?>
+</ul>
+
+<div class="tab-content">
+    <div id="basic" class="tab-pane fade in active">
+        <?php
+            $create_update_form->prepare();
+            echo $this->form()->openTag($create_update_form);
+            echo $this->formRow($create_update_form->get('registration_csrf'));
+        ?>
+        <input type="hidden" name="task" value="create_update"/>
+        <div>
+            <div class="inline form-sect">
+                <h4>Basic Information</h4>
+                <?php
+                  echo $this->formCollection($create_update_form->get('basic_info'));
+                ?>
+            </div>
+            <div class="inline form-sect">
+                <h4>Billing Address</h4>
+                <?php
+                  echo $this->formCollection($create_update_form->get('billing_address_info'));
+                ?>
+            </div>
+            <div class="inline form-sect">
+                <h4>Shipping Address</h4>
+                <?php
+                  echo $this->formCollection($create_update_form->get('shipping_address_info'));
+                ?>
+            </div>
+        </div>
+        <?php echo $this->formRow($create_update_form->get('submit')); ?>
+    </div>
+
+    <div id="orders" class="tab-pane fade in">
+        <button class="delete_orders">Delete Orders</button>
+      <table id="user_orders">
+          <tr>
+              <th> </th>
+              <th>Order #</th>
+              <th>Status</th>
+              <th>Sub Total</th>
+              <th>Total</th>
+              <th>Date Created</th>
+              <th> </th>
+          </tr>
+      <?php
+        if (count($user_orders) > 0)
+        {
+          foreach ($user_orders as $order)
+          {
+              ?>
+              <tr class="order_row">
+                  <td><input type="checkbox" data-id="<?php echo $order->getId(); ?>"/></td>
+                  <td><?php echo $order->getTransactionId(); ?></td>
+                  <td><?php echo $order->getStatus(); ?></td>
+                  <td><?php echo $order->getSubTotal(); ?></td>
+                  <td><?php echo $order->getTotal(); ?></td>
+                  <td><?php echo $order->getDateCreated()->format('m-d-Y'); ?></td>
+                  <td><a href="/admin/order/single?id=<?php echo $order->getId(); ?>">View/Edit</a></td>
+              </tr>
+              <?php
+          }
+        }
+      ?>
+      </table>
+    </div>
+<?php
+if (!empty($saved_cart))
+{
+?>
+    <div id="saved_cart" class="tab-pane fade in">
+        <div id="cart_info" style="margin-bottom: 20px;">
+            <div class="inline">
+                <h5>Applied Discounts</h5>
+                <?php
+                  $discount_rels = $saved_cart->getShopListDiscounts();
+
+                  if (count($discount_rels) > 0)
+                  {
+                      echo "<ul style='list-style: none; padding: 0; margin: 0;'>";
+                      foreach ($discount_rels as $discount_rel)
+                      {
+                          $discount = $discount_rel->getDiscount();
+                          echo "<li><a href='/admin/discount/single?id=".$discount->getId()."'>".$discount->getName()."</a> <a data-id='".$discount_rel->getId()."' class='remove_discount' href=''>[Remove]</a></li>";
+                      }
+                      echo "</ul>";
+                  }
+                else
+                {
+                  echo "No discounts applied.";
+                }
+                ?>
+            </div>
+            <div class="inline">
+                <h5>Billing Address</h5>
+                <?php
+                  $billing_address = $saved_cart->getBillingAddress();
+
+                  if (!empty($billing_address))
+                  {
+                      echo $billing_address->getCompany() . "<br/>";
+                      echo $billing_address->getFirstName() . " " . $billing_address->getLastName() . "<br/>";
+                      echo $billing_address->getLine1() . "<br/>";
+                      echo $billing_address->getLine2() . "<br/>";
+                      echo $billing_address->getCity() . ", " . $billing_address->getState() . " " . $billing_address->getZipcode();
+                  }
+                ?>
+            </div>
+            <div class="inline">
+                <h5>Shipping Address</h5>
+                <?php
+                  $shipping_address = $saved_cart->getShippingAddress();
+
+                  if (!empty($shipping_address))
+                  {
+                      echo $shipping_address->getCompany() . "<br/>";
+                      echo $shipping_address->getFirstName() . " " . $shipping_address->getLastName() . "<br/>";
+                      echo $shipping_address->getLine1() . "<br/>";
+                      echo $shipping_address->getLine2() . "<br/>";
+                      echo $shipping_address->getCity() . ", " . $shipping_address->getState() . " " . $shipping_address->getZipcode();
+                  }
+                ?>
+            </div>
+            <div class="inline">
+                <h5>Cart Information</h5>
+                <?php
+                  echo "Sub-Total: $" . $saved_cart->getSubTotal() . "<br/>";
+                  echo "Total: $" . $saved_cart->getTotal();
+                ?>
+            </div>
+        </div>
+          <table style="margin-bottom: 20px;" id="saved_cart">
+              <tr>
+                  <th>Image</th>
+                  <th>Sku Number</th>
+                  <th>Qty.</th>
+                  <th>Price</th>
+                  <th>Tax</th>
+                  <th>Name</th>
+                  <th>Weight</th>
+                  <th>Attributes</th>
+                  <th>Total</th>
+              </tr>
+              <?php
+                $cart_items = $saved_cart->getShopListElements();
+                  if (count($cart_items) > 0)
+                  {
+                      foreach ($cart_items as $cart_item)
+                      {
+                          ?>
+                          <tr class="line_item" data-line-id="<?php echo $cart_item->getId(); ?>">
+                              <td>
+                                  <?php
+                                  if (!is_null($cart_item->getImage()))
+                                  {
+                                      if (!is_null($cart_item->getSku()))
+                                      {
+                                          echo "<a href='/admin/product/single?id=".$cart_item->getSku()->getProduct()->getId()."'>";
+                                          echo "<img style='width: 32px;' src='/img/product_images/".$cart_item->getImage()->getUrl()."'/>";
+                                          echo "</a>";
+                                      }
+                                      else
+                                      {
+                                          echo "<img style='width: 32px;' src='/img/product_images/".$cart_item->getImage()->getUrl()."'/>";
+                                      }
+                                  }
+                                  ?>
+                              </td>
+                              <td><?php echo $cart_item->getNumber(); ?></td>
+                              <td><?php echo $cart_item->getQuantity(); ?></td>
+                              <td>$<?php echo $cart_item->getPrice(); ?></td>
+                              <td>$<?php echo $cart_item->getTax(); ?></td>
+                              <td><?php echo $cart_item->getName(); ?></td>
+                              <td><?php echo $cart_item->getWeight(); ?> lbs.</td>
+                              <td>
+                                  <?php
+                                  // Load sku attributes
+                                  $soovs = $cart_item->getSku()->getSkuOptionOptionValues();
+                                  if (count($soovs) > 0)
+                                  {
+                                      echo "<ul style='font-size: 10px; list-style: none; padding: 0; margin: 0;'>";
+                                      foreach ($soovs as $soov)
+                                      {
+                                          $option_value_rel = $soov->getOptionOptionValue();
+                                          echo "<li>".$option_value_rel->getOption()->getName().": ".$option_value_rel->getOptionValue()->getName()."</li>";
+                                      }
+                                      echo "</ul>";
+                                  }
+                                  ?>
+                              </td>
+                              <td>$<?php echo $cart_item->getTotal(); ?></td>
+                          </tr>
+                      <?php
+                      }
+                  }
+              ?>
+          </table>
+    </div>
+<?php
+}
+?>
+</div>

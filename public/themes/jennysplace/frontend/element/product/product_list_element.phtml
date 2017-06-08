@@ -1,0 +1,44 @@
+<?php
+/**
+ * @var Library\Model\Product\Product $product
+ * @var boolean $show_more_caption
+ * @var Zend\View\Model\ViewModel $mini_price_display
+ * @var Zend\View\Model\ViewModel $buy_now_button
+ */
+
+?>
+
+<div class="product-container col-xs-6 col-sm-4 col-md-3">
+    <div class="product">
+        <div class="product-photo-name">
+            <div class="product-photo">
+                <?php echo $this->product_photo($product); ?>
+            </div>
+            <?php if ($show_more_caption): ?>
+                <div class="product-show-more-caption">
+                    More Selections Available
+                </div>
+            <?php endif; ?>
+            <div class="product-name">
+                <?php echo $this->product_name($product); ?>
+            </div>
+            <div class="product-price">
+                <?php echo $this->render($mini_price_display); ?>
+            </div>
+            <?php
+
+                if ($this->layout()->admin_logged_in)
+                {
+                    // Show edit controls for admin users
+                    echo "<div class='product-id'> Product Id: ".$product->getId()."</div>";
+                    echo "<a style=\"color: black; position: absolute; width: 100px; background-color: white; top: 0px; right: 0px;\" target='_blank' href='/admin/product/single?id=".$product->getId()."'><i class='fa fa-edit'></i> Edit</a>";
+                }
+                else
+                {
+                    // Show buy now button for customers
+                    echo $this->render($buy_now_button);
+               }
+            ?>
+        </div>
+    </div>
+</div>

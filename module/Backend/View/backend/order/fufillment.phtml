@@ -1,0 +1,68 @@
+<div>
+    <strong>Customer: <?php echo $order->getUser()->getFirstName() . ' ' . $order->getUser()->getLastName(); ?></strong><br/>
+    <strong>Ship To: <?php echo $order->getShippingAddress()->getLine1() . ' ' . $order->getShippingAddress()->getLine2(); ?> | <?php echo $order->getShippingAddress()->getCity(); ?> | <?php echo $order->getShippingAddress()->getState(); ?> | <?php echo $order->getShippingAddress()->getZipcode(); ?></strong>
+</div>
+<table class="table">
+    <tr>
+        <th>Image</th>
+        <th>Sku Number</th>
+        <th>Qty.</th>
+        <th>Price</th>
+        <th>Name</th>
+        <th>Attributes</th>
+        <th>Product Date Added</th>
+        <th>Total</th>
+    </tr>
+    <?php
+    $order_lines = $order->getShopListElements();
+    if (count($order_lines) > 0)
+    {
+        foreach ($order_lines as $order_line)
+        {
+            ?>
+            <tr>
+                <td>
+                    <?php
+                    if (!is_null($order_line->getImage()))
+                    {
+                        $image_path = \Library\Service\Settings::get('image_path');
+
+                        if (!is_null($order_line->getSku()))
+                        {
+                            echo "<img style='width: 80px;' src='{$image_path}/product_images/".$order_line->getImage()->getUrl()."'/>";
+                        }
+                        else
+                        {
+                            echo "<img style='width: 80px;' src='{$image_path}/product_images/".$order_line->getImage()->getUrl()."'/>";
+                        }
+                    }
+                    ?>
+                </td>
+                <td><?php echo $order_line->getNumber(); ?></td>
+                <td><?php echo $order_line->getQuantity(); ?></td>
+                <td>$<?php echo $order_line->getPrice(); ?></td>
+                <td><?php echo $order_line->getName(); ?></td>
+                <td>
+                    <?php
+                    // Load sku attributes
+                    $soovs = $order_line->getSku()->getSkuOptionOptionValues();
+                    if (count($soovs) > 0)
+                    {
+                        echo "<ul style='font-size: 10px; list-style: none; padding: 0; margin: 0;'>";
+                        foreach ($soovs as $soov)
+                        {
+                            $option_value_rel = $soov->getOptionOptionValue();
+                            echo "<li>".$option_value_rel->getOption()->getName().": ".$option_value_rel->getOptionValue()->getName()."</li>";
+                        }
+                        echo "</ul>";
+                    }
+                    ?>
+                </td>
+                <td><?php echo $order_line->getSku()->getProduct()->getDateCreated()->format('m/d/Y'); ?></td>
+                <td>$<?php echo $order_line->getTotal(); ?></td>
+            </tr>
+            <?php
+        }
+    }
+    ?>
+</table>

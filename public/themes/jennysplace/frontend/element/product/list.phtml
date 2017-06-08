@@ -1,0 +1,18 @@
+<?php
+/**
+ * @var Zend\View\Model\ViewModel[] $product_views
+ * @var Zend\View\Model\ViewModel $pagination_view
+ */
+
+// Get product relationships
+echo "<div class='products-list'>";
+
+if (!empty($product_views))
+{
+    foreach ($product_views as $product_view)
+    {
+        echo $this->render($product_view);
+    }
+}
+
+echo "</div>";

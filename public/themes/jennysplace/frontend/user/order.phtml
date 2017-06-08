@@ -1,0 +1,174 @@
+<?php
+    $image_path = \Library\Service\Settings::get('image_path');
+?>
+<div id="order">
+    <h2>Order View</h2>
+    <p><a class="btn btn-success" href="/user/account"><i class="fa fa-arrow-left"></i> View Account</a></p>
+    <h3>Order #: <?php echo $order->getOrderNumber(); ?></h3>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="billing_address">
+                <h4>Billing Address</h4>
+                <?php $address = $order->getBillingAddress(); ?>
+                <ul data-id="<?php echo $address->getId(); ?>" class="address list-group">
+                    <?php if (!empty($address->getCompany())): ?>
+                        <li class="list-group-item"><?php echo $address->getCompany(); ?></li>
+                    <?php endif; ?>
+
+                    <li class="list-group-item"><?php echo $address->getFirstName(); ?></li>
+                    <li class="list-group-item"><?php echo $address->getLine1(); ?></li>
+                    <li class="list-group-item"><?php echo $address->getLine2(); ?></li>
+                    <li class="list-group-item"><?php echo $address->getCity(); ?>, <?php echo $address->getState(); ?> <?php echo $address->getZipcode(); ?></li>
+
+                    <?php if (!empty($address->getPhone())): ?>
+                        <li class="list-group-item">Phone: <?php echo $address->getPhone(); ?></li>
+                    <?php endif; ?>
+
+                    <?php if (!empty($address->getEmail())): ?>
+                        <li class="list-group-item">Email: <?php echo $address->getEmail(); ?></li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="shipping_address">
+                <h4>Shipping Address</h4>
+                <?php $address = $order->getShippingAddress(); ?>
+                <ul data-id="<?php echo $address->getId(); ?>" class="address list-group">
+                    <?php if (!empty($address->getCompany())): ?>
+                        <li class="list-group-item"><?php echo $address->getCompany(); ?></li>
+                    <?php endif; ?>
+
+                    <li class="list-group-item"><?php echo $address->getFirstName(); ?></li>
+                    <li class="list-group-item"><?php echo $address->getLine1(); ?></li>
+                    <li class="list-group-item"><?php echo $address->getLine2(); ?></li>
+                    <li class="list-group-item"><?php echo $address->getCity(); ?>, <?php echo $address->getState(); ?> <?php echo $address->getZipcode(); ?></li>
+
+                    <?php if (!empty($address->getPhone())): ?>
+                        <li class="list-group-item">Phone: <?php echo $address->getPhone(); ?></li>
+                    <?php endif; ?>
+
+                    <?php if (!empty($address->getEmail())): ?>
+                        <li class="list-group-item">Email: <?php echo $address->getEmail(); ?></li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <h4>Sales Order Information</h4>
+    <div id="order_info">
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Auth Code</strong>: <?php echo $order->getAuthCode(); ?></li>
+                    <li class="list-group-item"><strong>Sub-Total</strong>: $<?php echo $order->getSubTotal(); ?></li>
+                    <li class="list-group-item"><strong>Tax</strong>: $<?php echo $order->getTax(); ?></li>
+                    <li class="list-group-item"><strong>Shipping Cost</strong>: <?php echo $this->print_shipping_price($order->getShippingCost()); ?></li>
+                    <?php if (!empty($order->getTrackingNumber())): ?>
+                        <li class="list-group-item"><strong>Tracking Number</strong>: <?php echo $order->getTrackingNumber(); ?></li>
+                    <?php endif; ?>
+                    <?php if ($order->getDiscountAmount() > 0): ?>
+                    <li class="list-group-item"><strong>Total Discount</strong>: -$<?php echo $order->getDiscountAmount(); ?></li>
+                    <?php endif; ?>
+                    <?php if ($order->getStoreCredit() > 0): ?>
+                        <li class="list-group-item"><strong>Store Credit</strong>: -$<?php echo $order->getStoreCredit(); ?></li>
+                    <?php endif; ?>
+                    <li class="list-group-item"><strong>GRAND TOTAL</strong>: $<?php echo $order->getTotal(); ?></li>
+                </ul>
+            </div>
+            <div class="col-sm-6">
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Status</strong>: <?php echo $order->getStatus(); ?></li>
+                    <li class="list-group-item"><strong>Shipping Method</strong>: <?php echo $order->getShippingMethod()->getName(); ?></li>
+                    <li class="list-group-item"><strong>Payment Method</strong>: <?php echo $order->getPaymentMethod()->getName(); ?></li>
+                    <li class="list-group-item"><strong>Order Notes</strong>: <?php echo $order->getNotes(); ?></li>
+                    <li class="list-group-item"><strong>Date Ordered</strong>: <?php echo $order->getDateCreated()->format('(D) F d, Y - h:i A'); ?></li>
+                    <?php if ($order->getShippingDate() instanceof \DateTime): ?>
+                        <li class="list-group-item"><strong>Date Shipped</strong>: <?php echo $order->getShippingDate()->format('(D) F d, Y'); ?></li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <h4>Order Line Items</h4>
+    <div id="order_line_items">
+    <div class="row">
+        <div class="col-xs-12">
+                <table class="table">
+                    <tr>
+                        <th>Image</th>
+                        <th>Sku Number</th>
+                        <th>Qty.</th>
+                        <th>Price</th>
+                        <th>Tax</th>
+                        <th>Name</th>
+                        <th>Attributes</th>
+                        <th>Total</th>
+                        <th> </th>
+                    </tr>
+                    <?php
+                    $order_lines = $order->getShopListElements();
+                    if (count($order_lines) > 0)
+                    {
+                        foreach ($order_lines as $order_line)
+                        {
+                            ?>
+                            <tr class="line_item" data-line-id="<?php echo $order_line->getId(); ?>">
+                                <td>
+                                    <?php
+                                    if (!is_null($order_line->getImage()))
+                                    {
+                                        if (!is_null($order_line->getSku()))
+                                        {
+                                            echo "<a href='".$this->url('product', ['handle' => $order_line->getSku()->getProduct()->getPage()->getUrlHandle()])."'>";
+                                            echo "<img style='width: 32px;' src='".$image_path."/product_images/".$order_line->getImage()->getUrl()."'/>";
+                                            echo "</a>";
+                                        }
+                                        else
+                                        {
+                                            echo "<img style='width: 32px;' src='".$image_path."/product_images/".$order_line->getImage()->getUrl()."'/>";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // No Photo
+                                        echo "<a href='" . $this->url('product', ['handle' => $order_line->getSku()->getProduct()->getPage()->getUrlHandle()]) . "'>";
+                                        echo "<img style='width: 40px;' src='".$image_path."/layout_images/no_photo.jpg'/>";
+                                        echo "</a>";
+                                    }
+                                    ?>
+                                </td>
+                                <td><?php echo $order_line->getNumber(); ?></td>
+                                <td><?php echo $order_line->getQuantity(); ?></td>
+                                <td>$<?php echo $order_line->getPrice(); ?></td>
+                                <td>$<?php echo $order_line->getTax(); ?></td>
+                                <td><?php echo $order_line->getName(); ?></td>
+                                <td>
+                                    <?php
+                                    // Load sku attributes
+                                    $soovs = $order_line->getSku()->getSkuOptionOptionValues();
+                                    if (count($soovs) > 0)
+                                    {
+                                        echo "<ul style='font-size: 10px; list-style: none; padding: 0; margin: 0;'>";
+                                        foreach ($soovs as $soov)
+                                        {
+                                            $option_value_rel = $soov->getOptionOptionValue();
+                                            echo "<li>".$option_value_rel->getOption()->getName().": ".$option_value_rel->getOptionValue()->getName()."</li>";
+                                        }
+                                        echo "</ul>";
+                                    }
+                                    ?>
+                                </td>
+                                <td>$<?php echo $order_line->getTotal(); ?></td>
+                                <td><a class="btn btn-default" href="/user/return/<?php echo $order_line->getId(); ?>"><i class="fa fa-mail-reply"></i> Request Return</a></td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

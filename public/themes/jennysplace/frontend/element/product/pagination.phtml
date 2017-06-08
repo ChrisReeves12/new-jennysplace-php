@@ -1,0 +1,103 @@
+<?php
+/**
+ * @var int $product_qty
+ * @var int $page
+ * @var int $max_products
+ */
+
+
+/**
+ * Builds the uri string to use
+ * @param $page_num
+ * @return string
+ */
+if (!is_callable('create_uri'))
+{
+    function create_uri($page_num)
+    {
+        $query_vars = $_GET;
+        $query_vars['page'] = $page_num;
+
+        return '?' . http_build_query($query_vars);
+    }
+}
+
+$page = is_null($page) ? 1 : $page;
+
+if ($product_qty <= $max_products)
+{
+    echo '';
+}
+else
+{
+    $page_amount = ceil($product_qty / $max_products);
+    $prev_page = ($page < 1) ? 1 : $page - 1;
+    $next_page = $page + 1;
+
+    // Create page links
+    $output = "<div class='pagination-container'><ul class='pagination'>";
+    if ($page > 1)
+    {
+        $output .= "<li><a href='".create_uri('1')."'>" . "<i class='fa fa-angle-double-left'></i>" . "</a></li>";
+        $output .= "<li><a href='".create_uri($prev_page)."'>" . "<i class='fa fa-angle-left'></i>" . "</a></li>";
+    }
+    if ($page_amount < 12)
+    {
+        for ($i = 1; $i <= $page_amount; $i++)
+        {
+            $current_tag = '';
+            if ($i == $page)
+            {
+                $current_tag = "class='active'";
+            }
+
+            $output .= "<li $current_tag ><a href='".create_uri($i)."'>". $i . "</a></li>";
+        }
+    } else
+    {
+        // Put some of the page numbers
+        if ($page < 7)
+        {
+            for ($i = 1; $i <= 14; $i++)
+            {
+                $current_tag = '';
+                if ($i == $page)
+                {
+                    $current_tag = "class='active'";
+                }
+                $output .= "<li $current_tag><a href='".create_uri($i)."'>" . $i . "</a></li>";
+            }
+        } else
+        {
+            // Calculate page max
+            if (($page + 7) > $page_amount)
+            {
+                $page_max = $page_amount;
+            } else
+            {
+                $page_max = ($page + 7);
+            }
+
+            for ($i = ($page - 6); $i <= $page_max; $i++)
+            {
+                $current_tag = '';
+                if ($i == $page)
+                {
+                    $current_tag = "class='active'";
+                }
+                $output .= "<li $current_tag><a href='".create_uri($i)."'>" . $i . "</a></li>";
+            }
+        }
+    }
+    if ($page < $page_amount)
+    {
+        $output .= "<li><a href='".create_uri($next_page)."'>" . "<i class='fa fa-angle-right'></i>" . "</a></li>";
+        $output .= "<li><a href='".create_uri($page_amount)."'>" . "<i class='fa fa-angle-double-right '></i>" . "</a></li>";
+    }
+
+    $output .= "</ul></div>";
+
+    echo $output;
+}
+
+

@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row">
+        <div class="main-menu col-md-12 hidden-xs hidden-sm">
+            <?php echo $this->render('element/navigation/main-menu.phtml', ['main_navigation' => $this->layout()->main_navigation]); ?>
+        </div>
+    </div>
+    <div class="row">
+        <nav class="navbar navbar-default hidden-md hidden-lg">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main_navbar">
+                    <i class="fa fa-bars"> </i>
+                </button>
+                <div class="navbar-brand">
+                    Main Menu
+                </div>
+            </div>
+
+            <div class="collapse navbar-collapse" id="main_navbar">
+                <?php echo $this->render('element/navigation/main-menu.phtml', ['main_navigation' => $this->layout()->main_navigation, 'mobile' => true]); ?>
+            </div>
+        </nav>
+    </div>
+
+    <?php
+        // Render output
+        echo $this->render($this->layout()->getChildrenByCaptureTo('content')[0]);
+    ?>
+
+</div>

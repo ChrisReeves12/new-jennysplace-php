@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Verify Your Account</h2>
+            <p>Thank you for registering <?php echo $user->getFirstName(); ?>, please verify your account. We have sent you an email with instructions on
+                verifying and activating your account. If you did not see this in your inbox, check your spam mail and reset your spam mail filters.</p>
+            <p><a class="btn btn-default verify" data-id="<?php echo $user->getId(); ?>"><i class="fa fa-lock"></i> Resend Email</a></p>
+        </div>
+    </div>
+</div>
+<script>
+    $('a.verify').click(function (e)
+    {
+        e.preventDefault();
+        var url = '/auth/sendverify';
+        var id = $(this).attr('data-id');
+
+        // Send info to server
+        $.post(url, {id: id}, function (msg)
+        {
+            if (!msg.error)
+            {
+                alert("Your email has been sent, please check your spam messages if you cannot find the email.");
+            }
+            else
+            {
+                alert(msg.message);
+            }
+        }, 'json');
+    });
+</script>

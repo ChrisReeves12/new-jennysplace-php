@@ -1,0 +1,113 @@
+<?php
+use Library\Model\Shop\ShopListElement;
+
+$receipt_mode = isset($receipt_mode);
+$image_path = \Library\Service\Settings::get('image_path');
+?>
+
+<div class="cart_items">
+    <table class="table">
+        <tr>
+            <th>Image</th>
+            <th>Sku No.</th>
+            <th>Product Name</th>
+            <th>Attributes</th>
+            <th>Status</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <?php if (!$receipt_mode): ?>
+            <th></th>
+            <th></th>
+            <?php endif; ?>
+        </tr>
+        <?php
+        foreach ($cart_items as $cart_item)
+        {
+            if ($cart_item instanceof ShopListElement)
+            {
+                echo "<tr class='cart_item'>";
+                ?>
+                <td>
+                    <?php
+                    if (!is_null($cart_item->getImage()))
+                    {
+                        if (!is_null($cart_item->getSku()))
+                        {
+                            echo "<a href='" . $this->url('product', ['handle' => $cart_item->getSku()->getProduct()->getPage()->getUrlHandle()]) . "'>";
+                            echo "<img style='width: 40px;' src='{$image_path}/product_images/" . $cart_item->getImage()->getUrl() . "'/>";
+                            echo "</a>";
+                        }
+                        else
+                        {
+                            echo "<img style='width: 40px;' src='{$image_path}/product_images/" . $cart_item->getImage()->getUrl() . "'/>";
+                        }
+                    }
+                    else
+                    {
+                        // No photo provided
+                        echo "<a href='" . $this->url('product', ['handle' => $cart_item->getSku()->getProduct()->getPage()->getUrlHandle()]) . "'>";
+                        echo "<img style='width: 40px;' src='{$image_path}/layout_images/no_photo.jpg'/>";
+                        echo "</a>";
+                    }
+                    ?>
+                </td>
+                <?php
+                echo "<td>" . $cart_item->getNumber() . "</td>";
+                echo "<td><a href='".$this->url('product', ['handle' => $cart_item->getSku()->getProduct()->getPage()->getUrlHandle()])."' >" . $cart_item->getName() . "</a></td>";
+                ?>
+                <td>
+                    <?php
+                        $sku = $cart_item->getSku();
+                        $sku_option_values = $sku->getSkuOptionOptionValues();
+                        if (count($sku_option_values) > 0)
+                        {
+                            echo "<ul class='attributes'>";
+                            foreach ($sku_option_values as $sku_option_value)
+                            {
+                                $option_value = $sku_option_value->getOptionOptionValue();
+                                echo "<li>" . $option_value->getOptionValue()->getName() . "</li>";
+
+                            }
+                            echo "</ul>";
+                        }
+                    ?>
+                </td>
+                <?php
+                echo "<td>".$cart_item->getSku()->getRealStatus()->getName()."</td>";
+                echo "<td>$" . $cart_item->getPrice() . "</td>";
+                ?>
+                <td>
+                    <?php if (!$receipt_mode): ?>
+                    <select class="quantity form-control">
+                        <?php
+                        for ($x = 1; $x < 100; $x++)
+                        {
+                            if ($cart_item->getQuantity() == $x)
+                            {
+                                $selected = "selected='selected'";
+                            } else
+                            {
+                                $selected = '';
+                            }
+
+                            echo "<option {$selected}>" . $x . "</option>";
+                        }
+                        ?>
+                    </select>
+                    <?php else: ?>
+                        <?php echo $cart_item->getQuantity(); ?>
+                    <?php endif; ?>
+                </td>
+                <?php
+                echo "<td>$" . $cart_item->getTotal() . "</td>";
+                if (!$receipt_mode):
+                    echo "<td><a class='btn btn-default update' data-element-id='" . $cart_item->getId() . "' href=''><span class='fa fa-refresh'> </span> Update</a></td>";
+                    echo "<td><a class='btn btn-default remove' data-element-id='" . $cart_item->getId() . "' href='''><span class='fa fa-remove'> </span> Remove</a></td>";
+                endif;
+                echo "</tr>";
+            }
+        }
+        ?>
+    </table>
+</div>

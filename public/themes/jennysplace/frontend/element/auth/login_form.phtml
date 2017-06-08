@@ -1,0 +1,23 @@
+<?php
+/**
+ * \Library\Form\Login $login_form
+ */
+?>
+<?php
+    if (!($this->layout()->user instanceof \Library\Model\User\User))
+    {
+        echo "<p><i class=\"fa fa-sign-in\"></i> Customer Sign-In</p>";
+        $login_form->prepare();
+        echo $this->form()->openTag($login_form);
+        echo $this->formRow($login_form->get('login_csrf'));
+        echo "<input type='hidden' name='task' value='login'/>";
+        echo "<div class='form-group'>";
+        echo $this->formRow($login_form->get('email')->setOptions(['label' => '']));
+        echo "</div>";
+        echo "<div class='form-group'>";
+        echo $this->formRow($login_form->get('password')->setOptions(['label' => '']));
+        echo "</div>";
+        echo "<button class='btn btn-success' type='submit'><i class='fa fa-sign-in'></i> Sign In</button>";
+        echo $this->form()->closeTag();
+    }
+?>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+    <title>Order Fufillment #<?php echo $order_number; ?></title>
+    <?php
+    // Stylesheets
+    echo $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/png', 'href' => $this->basePath() . '/img/favicon.png'])
+        ->prependStylesheet($this->basePath('css/bootstrap.min.css'), ['media' => 'all'])
+        ->prependStylesheet('/css/font-awesome.min.css', ['media' => 'all']);
+    ?>
+</head>
+<body style="margin: 0; padding: 0">
+<header><h4>FUFILLMENT | Order #<?php echo $order_number; ?></h4></header>
+<div class="container-fluid">
+    <?php echo $this->content; ?>
+</div>
+</body>
+</html>

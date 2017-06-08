@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col-sm-9">
+        <h4><i class="fa fa-bar-chart"></i> Sales Report</h4>
+        <ul class="list-group">
+            <li class="list-group-item">Total Sales Revenue: $<?php echo number_format($grand_totals, 2, '.', ',') ?></li>
+            <li class="list-group-item">This Year's Sales Revenue: $<?php echo number_format($year_grand_totals, 2, '.', ',') ?></li>
+            <li class="list-group-item">This Month's Sales Revenue: $<?php echo number_format($month_grand_totals, 2, '.', ',') ?></li>
+            <li class="list-group-item">Today's Sales Revenue: $<?php echo number_format($today_grand_totals, 2, '.', ',') ?></li>
+        </ul>
+
+        <h4><i class="fa fa-shopping-cart"></i> Order Information</h4>
+        <ul class="list-group">
+            <li class="list-group-item">Number Of Orders (All Time): <?php echo $total_order_amount; ?></li>
+            <li class="list-group-item">Number Of Orders (This Year): <?php echo $total_year_order_amount ?></li>
+            <li class="list-group-item">Number Of Orders (Today): <?php echo $total_today_order_amount ?></li>
+        </ul>
+
+        <table class="table">
+            <tr>
+                <th>Order #</th>
+                <th>User</th>
+                <th>Status</th>
+                <th>Pay Method</th>
+                <th>Sub-Total</th>
+                <th>Total</th>
+                <th>Date Created</th>
+                <th> </th>
+            </tr>
+            <?php
+            if (count($recent_orders) > 0)
+            {
+                foreach ($recent_orders as $recent_order)
+                {
+                    ?>
+                    <tr>
+                        <td><?php echo $recent_order->getOrderNumber(); ?></td>
+                        <td><?php echo $recent_order->getUser()->getFirstName() . " " . $recent_order->getUser()->getLastName(); ?></td>
+                        <td><?php echo $recent_order->getStatus(); ?></td>
+                        <td><?php echo $recent_order->getPaymentMethod()->getName(); ?></td>
+                        <td><?php echo '$'.$recent_order->getSubTotal(); ?></td>
+                        <td><?php echo '$'.$recent_order->getTotal(); ?></td>
+                        <td><?php echo $recent_order->getDateCreated()->format('m/d/Y'); ?></td>
+                        <td><a class="btn btn-default" href="/admin/order/single?id=<?php echo $recent_order->getId(); ?>"><i class="fa fa-edit"></i> Edit</a></td>
+                    </tr>
+                    <?php
+                }
+            }
+            ?>
+        </table>
+    </div>
+    <div class="col-sm-3">
+        <h4><i class="fa fa-user-plus"></i> New Customers</h4>
+        <ul class="list-group">
+            <?php
+            if (count($new_customers) > 0)
+            {
+                foreach ($new_customers as $new_customer)
+                {
+                    ?>
+                    <li class="list-group-item"><?php echo $new_customer['date']->format('m/d/Y'); ?>: <a href="/admin/user/single?id=<?php echo $new_customer['id']; ?>"><?php echo $new_customer['name']; ?></a></li>
+                    <?php
+                }
+            }
+            ?>
+        </ul>
+    </div>
+</div>

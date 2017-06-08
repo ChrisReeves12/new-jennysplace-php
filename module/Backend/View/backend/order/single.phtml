@@ -1,0 +1,115 @@
+<h2>Administer Order</h2>
+<p><a href="/admin/list/orders"><< View All Orders</a></p>
+<h5>Order #: <?php echo $order->getOrderNumber(); ?></h5>
+
+<h4>Customer Information</h4>
+<div id="user_info">
+    <div class="user_info">
+        <h5>Purchaser</h5>
+        Name: <a target="_blank" href="/admin/user/single?id=<?php echo $order->getUser()->getId(); ?>"><?php echo $order->getUser()->getFirstName() . " " . $order->getUser()->getLastName(); ?></a><br/>
+        Email: <?php echo $order->getUser()->getEmail(); ?>
+    </div>
+    <div class="inline billing_address">
+        <h5>Billing Address</h5>
+        <?php echo $this->print_address($order->getBillingAddress()); ?>
+    </div>
+    <div class="inline shipping_address">
+        <h5>Shipping Address</h5>
+        <?php
+          if (!empty($order->getShippingAddress()))
+          {
+            echo $this->print_address($order->getShippingAddress());
+          }
+        ?>
+    </div>
+</div>
+
+<h4>Sales Order Information</h4>
+<div id="order_info"> </div>
+
+<h4>Order Line Items</h4>
+<button class="btn btn-danger delete_line_items"><i class="fa fa-remove"></i> Delete Line Items</button>
+<button class="btn btn-success add_line_item" data-toggle="modal" data-target="#addProductModal"><i class="fa fa-plus-square"></i> Add Item</button>
+
+<div id="order_line_items"> </div>
+
+<div id="control_console">
+    <button class="btn btn-success save_order"><i class="fa fa-save"></i> Save Order</button>
+</div>
+<!-- Modal for adding products -->
+<div id="addProductModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Item</h2>
+            </div>
+            <div class="modal-body">
+                <p>Use the form below to add a sku to the order.</p>
+                <div class="form-group">
+                    <div class="component-product-search"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for selecting the product -->
+<div id="addSingleProductModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2></h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-4 product-photo">
+
+                    </div>
+                    <div class="col-xs-4 product-options">
+
+                    </div>
+                    <div class="col-xs-4 product-qty-sect">
+                        Qty: <select name="product-qty">
+                            <?php
+                                for ($x = 1; $x < 100; $x++)
+                                {
+                                    echo "<option value='".$x."'>$x</option>";
+                                }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Data layer for React components
+    window.newjennysplace = window.newjennysplace || {};
+    window.newjennysplace.backend = window.newjennysplace.backend || {};
+    window.newjennysplace.backend.page_data = window.newjennysplace.backend.page_data || {};
+
+    window.newjennysplace.backend.page_data.sub_total = '<?php echo $order->getSubTotal(); ?>';
+    window.newjennysplace.backend.page_data.tax = '<?php echo $order->getTax(); ?>';
+    window.newjennysplace.backend.page_data.shipping_cost = '<?php echo $order->getShippingCost(); ?>';
+    window.newjennysplace.backend.page_data.tracking_number = '<?php echo $order->getTrackingNumber(); ?>';
+    window.newjennysplace.backend.page_data.total_discount = '<?php echo $order->getDiscountAmount(); ?>';
+    window.newjennysplace.backend.page_data.store_credit = '<?php echo $order->getStoreCredit(); ?>';
+    window.newjennysplace.backend.page_data.total = '<?php echo $order->getTotal(); ?>';
+    window.newjennysplace.backend.page_data.original_total = '<?php echo $order->getOriginalGrandTotal(); ?>';
+    window.newjennysplace.backend.page_data.total_weight = '<?php echo $order->getTotalWeight(); ?>';
+    window.newjennysplace.backend.page_data.payment_method = '<?php echo $order->getPaymentMethod()->getName(); ?>';
+    window.newjennysplace.backend.page_data.date_created = '<?php echo $order->getDateCreated()->format('(D) F d, Y - h:i A'); ?>';
+    window.newjennysplace.backend.page_data.notes = '<?php echo $order->getNotes(); ?>';
+    window.newjennysplace.backend.page_data.date_shipped = '<?php echo empty($order->getShippingDate()) ? '' : $order->getShippingDate()->format('(D) F d, Y'); ?>';
+    window.newjennysplace.backend.page_data.fufillment_link = '<?php echo $this->url('admin_order', ['action' => 'fufillment']) ?>?id=<?php echo $order->getOrderNumber(); ?>';
+    window.newjennysplace.backend.page_data.invoice_link = '<?php echo $this->url('admin_order', ['action' => 'invoice']) ?>?id=<?php echo $order->getOrderNumber(); ?>';
+    window.newjennysplace.backend.page_data.auth_code = '<?php echo $order->getAuthCode(); ?>';
+    window.newjennysplace.backend.page_data.status = '<?php echo $order->getStatus() ?>';
+    window.newjennysplace.backend.page_data.shipping_method_id = '<?php echo $order->getShippingMethod()->getId(); ?>';
+    window.newjennysplace.backend.page_data.shipping_methods = <?php echo $this->shipping_methods_json; ?>;
+    window.newjennysplace.backend.page_data.line_items = <?php echo $this->order_lines_json ?>;
+</script>

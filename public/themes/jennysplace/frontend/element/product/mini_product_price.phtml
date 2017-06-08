@@ -1,0 +1,22 @@
+<?php
+/**
+ * @var Library\Model\Product\Product $product
+ */
+
+if (!$this->layout()->hide_prices)
+{
+    $discount_price = $product->getDiscountPrice();
+    if (!empty($discount_price) && $product->getDiscountPrice() > 0)
+    {
+        ?>
+        <span class="old-price">$<?php echo $product->getBasePrice(); ?></span><br/>
+        <span class="current-price">$<?php echo $discount_price; ?></span>
+        <?php
+    }
+    else
+    {
+        ?>
+        <span class="current-price">$<?php echo $product->getBasePrice(); ?></span>
+        <?php
+    }
+}

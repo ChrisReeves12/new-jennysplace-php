@@ -1,0 +1,29 @@
+<h2><i class="fa fa-thumb-tack"></i> Order Reciept</h2>
+<h3>Order #: <?php echo $order->getOrderNumber(); ?></h3>
+<p>Thank you for placing your order with us. Keep this reciept for your records</p>
+
+<h3>Items Ordered</h3>
+<?php
+    $line_items = $order->getShopListElements()->toArray();
+    if (count($line_items) > 0)
+    {
+        echo $this->render('element/cart/product_listing', ['cart_items' => $line_items, 'receipt_mode' => true]);
+        ?>
+        <div>
+            <strong>Sub-Total</strong>: $<?php echo $order->getSubTotal(); ?><br/>
+            <?php if ($order->getDiscountAmount() > 0): ?>
+            <strong>Discount</strong>: -$<?php echo $order->getDiscountAmount(); ?><br/>
+            <?php endif; ?>
+
+            <strong>Shipping Method</strong>: <?php echo $this->print_shipping_price($order->getCurrentShippingCost()); ?> - <?php echo $order->getShippingMethod()->getName(); ?><br/>
+            <strong>Sales Tax</strong>: $<?php echo $order->getTax(); ?><br/>
+
+            <?php if ($order->getStoreCredit() > 0): ?>
+                <strong>Store Credit</strong>: -$<?php echo $order->getStoreCredit(); ?><br/>
+            <?php endif; ?>
+
+            <br/><span style="color: green; font-weight: bold; font-size: 18px;">Grand Total: $<?php echo $order->getTotal(); ?></span>
+        </div>
+        <?php
+    }
+?>

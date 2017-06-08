@@ -1,0 +1,9 @@
+1. -Create a new database field on product called "show_more_caption" as a boolean.
+2. -Modify the backend product create_update form to include a checkbox for "show_more_caption", defaults to "false".
+3. -Go to the backend product controller and update the views/actions to show the option
+4. -Update the hydrator to ensure the value is updated when the form is shown.
+5. -Make sure the save method in the product service is updated to save the "show_more_caption".
+6. -Go to the database and update this field to be "false" on all products.
+7. -In the mini_product_display, have it perform a check if there are mulitple skus available for the product and if
+there are, show the caption "More Selections Available"
+

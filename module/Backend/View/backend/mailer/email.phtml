@@ -1,0 +1,43 @@
+<h1>Compose Email</h1>
+<a href="/admin/list/emails"><< View All Emails</a>
+<?php
+$email_form->prepare();
+echo $this->form()->openTag($email_form); ?>
+<input type="hidden" name="task" value="save_email"/>
+<div class="row">
+    <div class="col-sm-8">
+        <div class="form-group">
+            <?php echo $this->formRow($email_form->get('campaign')->setAttribute('class', 'form-control')); ?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->formRow($email_form->get('from')->setAttribute('class', 'form-control')); ?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->formRow($email_form->get('subject')->setAttribute('class', 'form-control')); ?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->formRow($email_form->get('scheduled_send_time')->setAttribute('class', 'ui-datepicker form-control')); ?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->formRow($email_form->get('message')->setAttribute('class', 'form-control')); ?>
+        </div>
+        <div class="form-inline">
+            <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Save Email</button>
+            <?php if (isset($email)): ?>
+                <button data-id="<?php echo $email->getId(); ?>" class="btn btn-default" id="test_email"><i class="fa fa-arrow-circle-o-right"></i> Send Test Email</button>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php if (!empty($email_mail_subs)): ?>
+        <div class="col-sm-4">
+            <h3>Performance Report</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Status: </strong> <?php echo $email->isCompleted() ? 'Complete' : 'Incomplete'; ?></li>
+                <li class="list-group-item"><strong>Total # Of Emails To Send: </strong> <?php echo count($email_mail_subs); ?></li>
+                <li class="list-group-item"><strong># Of Emails Sent: </strong> <?php echo count(array_filter($email_mail_subs, function ($a) {return $a->wasSent();})); ?></li>
+                <li class="list-group-item"><strong># Of Emails Opened: </strong> <?php echo count(array_filter($email_mail_subs, function ($a) {return $a->wasOpened();})) ?></li>
+                <li class="list-group-item"><strong># Of People Unsubscribed: </strong> <?php echo count(array_filter($email_mail_subs, function ($a) {return $a->isUnsubscribed();})) ?></li>
+            </ul>
+        </div>
+    <?php endif; ?>
+</div>

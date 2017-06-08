@@ -1,0 +1,7 @@
+section.main-section {
+  min-height: 800px;
+}
+section.main-section h2 {
+  margin-top: 15px;
+  margin-bottom: 7px;
+}

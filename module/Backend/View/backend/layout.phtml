@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+    <head>
+        <title>New Jenny's Place v3.0 Administration Panel</title>
+        <?php
+            // Stylesheets
+            echo $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/png', 'href' => $this->basePath() . '/img/favicon.png'])
+                ->prependStylesheet($this->basePath('/ext/fancybox/source/jquery.fancybox.css?v=2.1.5'))
+                ->prependStylesheet($this->basePath('/ext/fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5'))
+                ->prependStylesheet($this->basePath('/ext/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7'))
+                ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
+                ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
+                ->prependStylesheet($this->basePath('css/jquery-ui.css'))
+                ->prependStylesheet('/css/backend/style.css')
+                ->prependStylesheet('/css/font-awesome.min.css');
+
+            // Scripts
+            echo $this->headScript()
+                ->prependFile($this->basePath('js/layout.js'))
+                ->prependFile('/js/react-dom.js')
+                ->prependFile('/js/react.js')
+                ->prependFile('/ext/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5')
+                ->prependFile('/ext/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7')
+                ->prependFile('/ext/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6')
+                ->prependFile('/ext/fancybox/lib/jquery.mousewheel-3.0.6.pack.js')
+                ->prependFile('/ext/fancybox/source/jquery.fancybox.js?v=2.1.5')
+                ->prependFile($this->basePath('js/backend/backend.js'))
+                ->prependFile($this->basePath('js/backend/ckeditor/ckeditor.js'))
+                ->prependFile($this->basePath('js/jquery-ui-1.11.4/jquery-ui.min.js'))
+                ->prependFile($this->basePath('js/bootstrap.min.js'))
+                ->prependFile($this->basePath('js/jquery-2.1.4.js'))
+        ?>
+    </head>
+    <body>
+        <header>
+            <div class="top_header">
+                New Jenny's Place v3.0 Administration Panel
+            </div>
+            <nav class="navbar navbar-static-top">
+                <ul class="nav navbar-nav">
+                    <li><a href="/admin"><i class="fa fa-home"></i> Home</a></li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-tag"></i> Merchandising <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'products']); ?>"><i class="fa fa-diamond"></i> Products</a></li>
+                            <li><a href="/admin/bulk-edit/products"><i class="fa fa-gavel"></i> Bulk Edit Products</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'categories']); ?>"><i class="fa fa-tag"></i> Categories</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'options']); ?>"><i class="fa fa-gear"></i> Product Options</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'discounts']); ?>"><i class="fa fa-heart"></i> Discounts</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'taxes']); ?>"><i class="fa fa-bank"></i> Taxes</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-truck"></i> Shipping <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'shipping_ranges']); ?>"><i class="fa fa-sliders"></i> Shipping Ranges</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'shipping_methods']); ?>"><i class="fa fa-truck"></i> Shipping Methods</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-user"></i> Users <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'users']); ?>"><i class="fa fa-user"></i> Users</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-envelope-o"></i> Email Marketing <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'email_campaigns']); ?>"><i class="fa fa-inbox"></i> Campaigns</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'emails']); ?>"><i class="fa fa-envelope-square"></i> Emails</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'mail_list_subscribers']); ?>"><i class="fa fa-user-plus"></i> Newsletter Subscribers</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-pencil-square"></i> Layout <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'custom_pages']); ?>"><i class="fa fa-file"></i> Custom Pages</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'banners']); ?>"><i class="fa fa-bookmark"></i> Banners</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'menus']); ?>"><i class="fa fa-reorder"></i> Menus</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'content_blocks']); ?>"><i class="fa fa-file-image-o"></i> Content Blocks</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-money"></i> Sales <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'orders']); ?>"><i class="fa fa-shopping-cart"></i> Orders</a></li>
+                            <li><a href="<?php echo $this->url('admin_list', ['entity' => 'returns']); ?>"><i class="fa fa-arrow-left"></i> Product Returns</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="/admin/settings"><i class="fa fa-gear"></i> Store Settings</a></li>
+                    <li><a target="_blank" href="/"><i class="fa fa-eye"></i> View Store</a></li>
+                </ul>
+            </nav>
+        </header>
+        <section id="main" class="container">
+            <?php echo $this->content; ?>
+        </section>
+        <script>
+            try { window.newjennysplace.backend.ckEditor.init(); } catch (err) {}
+        </script>
+        <script src="<?php echo $this->basePath('js/backend/components.js'); ?>"></script>
+    </body>
+</html>

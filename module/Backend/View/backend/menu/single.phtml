@@ -1,0 +1,35 @@
+<h2>Administer Menu</h2>
+<p><a href="/admin/list/menus"><< View All Menus</a></p>
+<?php
+$create_update_form->prepare();
+echo $this->form()->openTag($create_update_form);
+echo $this->formRow($create_update_form->get('label'));
+echo $this->formRow($create_update_form->get('css_class_name'));
+echo $this->formRow($create_update_form->get('inactive'));
+?>
+
+<div class="menu_items">
+    <h4>Menu Items</h4>
+    <input placeholder="Menu Item Label" type="text" class="menu_item_label"/><br/>
+    <input placeholder="Menu Item URL" type="text" class="menu_item_url"/><br/>
+    <input placeholder="CSS Class Name" type="text" class="menu_item_css_class"/><br/>
+    <button class="add_menu_item">Add Menu Item</button>
+</div>
+<div class="scrollbox menu_items_box">
+<?php
+  // Get menu items
+  if (count($menu_items) > 0)
+  {
+    foreach ($menu_items as $menu_item)
+    {
+      ?>
+        <div class="menu_item"><a href="" class="delete fa fa-close"></a>Menu Item Label<br><input type="text" value="<?php echo $menu_item->getLabel(); ?>" class="menu_item_name"><br>Menu Item URL<br><input type="text" value="<?php echo $menu_item->getUrl(); ?>" class="menu_item_url"><br>Menu Item CSS<br><input type="text" value="<?php echo $menu_item->getCssClass(); ?>" class="menu_item_css"></div>
+      <?php
+    }
+  }
+?>
+</div>
+<input type="submit" value="Save Menu"/>
+<?php
+echo $this->form()->closeTag();
+?>

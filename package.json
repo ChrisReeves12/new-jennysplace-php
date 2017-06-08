@@ -1,0 +1,12 @@
+{
+	"name": "new-jennys-place",
+	"version": "0.3.0",
+	"description": "Node scripts we required for New Jenny's Place",
+	"author": "Christopher Reeves <chrisreeves12@yahoo.com>",
+	"dependencies": {
+		"path": "*",
+		"gulp-uglify": "*",
+		"gulp-plumber": "*",
+		"gulp-less": "*"
+	}
+}

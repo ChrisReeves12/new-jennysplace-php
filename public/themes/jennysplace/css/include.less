@@ -1,0 +1,19 @@
+.gradient (@startColor: #eee, @endColor: white) {
+  background-color: @startColor;
+  background: -webkit-gradient(linear, left top, left bottom, from(@startColor), to(@endColor));
+  background: -webkit-linear-gradient(top, @startColor, @endColor);
+  background: -moz-linear-gradient(top, @startColor, @endColor);
+  background: -ms-linear-gradient(top, @startColor, @endColor);
+  background: -o-linear-gradient(top, @startColor, @endColor);
+}
+
+.drop-shadow (@x: 0, @y: 1px, @blur: 2px, @spread: 0, @alpha: 0.25) {
+  -webkit-box-shadow:	@x @y @blur @spread rgba(0, 0, 0, @alpha);
+  -moz-box-shadow:	@x @y @blur @spread rgba(0, 0, 0, @alpha);
+  box-shadow:		@x @y @blur @spread rgba(0, 0, 0, @alpha);
+}
+
+@xs: ~"screen and (min-width : 480px)";
+@sm: ~"screen and (min-width : 768px)";
+@md: ~"screen and (min-width : 992px)";
+@lg: ~"screen and (min-width : 1200px)";

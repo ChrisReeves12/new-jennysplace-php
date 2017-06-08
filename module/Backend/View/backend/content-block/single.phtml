@@ -1,0 +1,12 @@
+<h2>Setup Content Block</h2>
+<p><a href="/admin/list/content_blocks"><< View All Content Blocks</a> | <a href="/admin/content-block/single">Create New Content Block</a></p>
+
+<?php
+$create_update->prepare();
+echo $this->form()->openTag($create_update);
+echo $this->formRow($create_update->get('handle'));
+echo $this->formRow($create_update->get('content'));
+?>
+<input type="submit" value="Save Content Block"/>
+<?php
+echo $this->form()->closeTag();

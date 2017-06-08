@@ -1,0 +1,138 @@
+<div class="panes">
+    <div class="left-pane inline">
+        <strong>Order #: <?php echo $order->getOrderNumber(); ?></strong><br/>
+
+        <h4>Customer Information</h4>
+        <div id="user_info">
+            <div class="user_info">
+                <h5>Purchaser</h5>
+                Name: <?php echo $order->getUser()->getFirstName() . " " . $order->getUser()->getLastName(); ?><br/>
+                Email: <?php echo $order->getUser()->getEmail(); ?>
+            </div>
+            <table>
+                <tr>
+                    <td>
+                        <div class="billing_address">
+                            <h5>Billing Address</h5>
+                            <?php echo $this->print_address($order->getBillingAddress(), true); ?>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="shipping_address">
+                            <h5>Shipping Address</h5>
+                            <?php
+                            if (!empty($order->getShippingAddress()))
+                            {
+                                echo $this->print_address($order->getShippingAddress(), true);
+                            }
+                            ?>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <h4>Sales Order Information</h4>
+    <div id="order_info">
+        <div>
+            <ul>
+                <li><strong>Shipping Method</strong>: <?php echo $this->print_shipping_price($order->getShippingCost()) . ' - ' . $order->getShippingMethod()->getName(); ?></li>
+                <?php if (!empty($order->getTrackingNumber())): ?>
+                    <li><strong>Tracking Number</strong>: <?php echo $order->getTrackingNumber(); ?></li>
+                <?php endif; ?>
+                <li><strong>Payment Method</strong>: <?php echo $order->getPaymentMethod()->getName(); ?></li>
+                <li><strong>Order Notes</strong>: <?php echo $order->getNotes(); ?></li>
+                <?php if ($order->getShippingDate() instanceof \DateTime): ?>
+                    <li><strong>Date Shipped</strong>: <?php echo $order->getShippingDate()->format('(D) F d, Y'); ?></li>
+                <?php endif; ?>
+            </ul>
+        </div>
+        <div>
+            <ul>
+                <li><strong>Auth Code</strong>: <?php echo $order->getAuthCode(); ?></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="order_line_items">
+    <h4>Order Line Items</h4>
+    <table>
+        <tr>
+            <th>Image</th>
+            <th>Sku Number</th>
+            <th>Qty.</th>
+            <th>Price</th>
+            <th>Name</th>
+            <th>Attributes</th>
+            <th>Total</th>
+        </tr>
+        <?php
+        $order_lines = $order->getShopListElements();
+        if (count($order_lines) > 0)
+        {
+            foreach ($order_lines as $order_line)
+            {
+                ?>
+                <tr>
+                    <td>
+                        <?php
+                        if (!is_null($order_line->getImage()))
+                        {
+                            $image_path = \Library\Service\Settings::get('image_path');
+
+                            if (!is_null($order_line->getSku()))
+                            {
+                                echo "<img style='width: 32px;' src='{$image_path}/product_images/".$order_line->getImage()->getUrl()."'/>";
+                            }
+                            else
+                            {
+                                echo "<img style='width: 32px;' src='{$image_path}/product_images/".$order_line->getImage()->getUrl()."'/>";
+                            }
+
+                            // Show line through for out of stock items
+                            $class = ($order_line->getQuantity() < 1) ? "class='out-of-stock'" : "";
+                        }
+                        ?>
+                    </td>
+                    <td <?=$class ?> ><?php echo $order_line->getNumber(); ?></td>
+                    <td><?php echo ($order_line->getQuantity() < 1) ? "N/A" : $order_line->getQuantity(); ?></td>
+                    <td <?=$class ?>>$<?php echo $order_line->getPrice(); ?></td>
+                    <td <?=$class ?>><?php echo $order_line->getName(); ?></td>
+                    <td>
+                        <?php
+                        // Load sku attributes
+                        $soovs = $order_line->getSku()->getSkuOptionOptionValues();
+                        if (count($soovs) > 0)
+                        {
+                            echo "<ul style='font-size: 10px; list-style: none; padding: 0; margin: 0;'>";
+                            foreach ($soovs as $soov)
+                            {
+                                $option_value_rel = $soov->getOptionOptionValue();
+                                echo "<li>".$option_value_rel->getOption()->getName().": ".$option_value_rel->getOptionValue()->getName()."</li>";
+                            }
+                            echo "</ul>";
+                        }
+                        ?>
+                    </td>
+                    <td>$<?php echo $order_line->getTotal(); ?></td>
+                </tr>
+            <?php
+            }
+        }
+        ?>
+    </table>
+</div>
+<div id="totals">
+    <ul>
+        <li><strong>Sub-Total</strong>: $<?php echo $order->getSubTotal(); ?></li>
+        <li><strong>Tax</strong>: $<?php echo $order->getTax(); ?></li>
+        <li><strong>Shipping Cost</strong>: <?php echo $this->print_shipping_price($order->getShippingCost()); ?></li>
+        <?php if ($order->getDiscountAmount() > 0): ?>
+            <li><strong>Total Discount</strong>: $<?php echo $order->getDiscountAmount(); ?></li>
+        <?php endif; ?>
+        <?php if ($order->getStoreCredit() > 0): ?>
+            <li><strong>Store Credit</strong>: -$<?php echo $order->getStoreCredit(); ?></li>
+        <?php endif; ?>
+        <li><strong>GRAND TOTAL</strong>: $<?php echo $order->getTotal(); ?></li>
+    </ul>
+</div>

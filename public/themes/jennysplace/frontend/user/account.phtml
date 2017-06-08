@@ -1,0 +1,43 @@
+<h2>My Account</h2>
+<?php if ($user->getStoreCredit() > 0): ?>
+<h4 style="color: #5e946c">Available Online Store Credit: $<?php echo $user->getStoreCredit(); ?></h4>
+<?php endif; ?>
+<div id="basic_info">
+    <?php echo $this->render($user_info_forms); ?>
+</div>
+
+<h3>Order History</h3>
+<div id="orders">
+  <?php echo $this->render($order_list); ?>
+</div>
+<div id="returns_list">
+    <h3>Returns</h3>
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Order #</th>
+            <th>Product</th>
+            <th>Status</th>
+            <th>Date Created</th>
+            <th> </th>
+        </tr>
+        <?php
+            if (!empty($returns))
+            {
+                foreach ($returns as $return)
+                {
+                    ?>
+                    <tr>
+                        <td><?php echo $return->getId(); ?></td>
+                        <td><?php echo $return->getShopListElement()->getShopList()->getOrderNumber(); ?></td>
+                        <td><?php echo $return->getShopListElement()->getSku()->getProduct()->getName(); ?></td>
+                        <td><?php echo $return->getStatus(); ?></td>
+                        <td><?php echo $return->getDateCreated()->format('m/d/Y'); ?></td>
+                        <td><a class="btn btn-default" href="/user/return/<?php echo $return->getShopListElement()->getId(); ?>">View Return</a></td>
+                    </tr>
+                    <?php
+                }
+            }
+        ?>
+    </table>
+</div>

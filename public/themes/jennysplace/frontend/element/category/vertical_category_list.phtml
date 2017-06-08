@@ -1,0 +1,54 @@
+<?php
+/**
+ * @var \Library\Model\Category\Category[] $categories
+ * @var bool|null $mobile
+ */
+
+$category_list_output = "";
+
+if (!empty($categories))
+{
+    ob_start();
+    foreach ($categories as $category)
+    {
+        echo "<li><a href='".$this->url('category', ['handle' => $category->getPage()->getUrlHandle()])."'>".$category->getName()."</a></li>";
+    }
+    $category_list_output = ob_get_contents();
+    ob_end_clean();
+}
+
+// Render mobile version
+if (!empty($mobile) && $mobile == true):
+    ?>
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#categories_navbar">
+            <i class="fa fa-bars"> </i>
+        </button>
+        <div class="navbar-brand">
+            Categories
+        </div>
+    </div>
+    <div class="collapse navbar-collapse" id="categories_navbar">
+        <?php if (!empty($category_list_output)): ?>
+        <ul class="nav navbar-nav">
+            <?php echo $category_list_output; ?>
+        </ul>
+        <?php endif; ?>
+    </div>
+    <?php
+
+// Render regular version
+else:
+?>
+
+<h3><i class="glyphicon glyphicon-tag"></i> Categories</h3>
+    <?php if (!empty($category_list_output)): ?>
+    <ul>
+        <?php echo $category_list_output; ?>
+    </ul>
+    <?php
+    endif;
+endif;
+
+
+

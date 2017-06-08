@@ -1,0 +1,13 @@
+<h2>Shipping Range</h2>
+<p><a href="/admin/list/shippingranges"><< View All Shipping Ranges</a> | <a href="/admin/shipping-range/single">Create New Shipping Range</a></p>
+<?php
+$create_update_form->prepare();
+echo $this->form()->openTag($create_update_form);
+echo $this->formRow($create_update_form->get('shipping_method'));
+echo $this->formRow($create_update_form->get('price'));
+echo $this->formRow($create_update_form->get('low_value'));
+echo $this->formRow($create_update_form->get('high_value'));
+?>
+<input type="submit" value="Save"/>
+<?php
+echo $this->form()->closeTag();

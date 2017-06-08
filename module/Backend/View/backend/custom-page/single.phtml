@@ -1,0 +1,18 @@
+<h2>Setup Custom Page</h2>
+<p><a href="/admin/list/custom_pages"><< View All Custom Pages</a> | <a href="/admin/custom-page/single">Create New Custom Page</a></p>
+
+<?php
+$create_update->prepare();
+echo $this->form()->openTag($create_update);
+echo $this->formRow($create_update->get('title'));
+echo $this->formRow($create_update->get('url_handle'));
+echo $this->formRow($create_update->get('inactive'));
+echo $this->formRow($create_update->get('meta_description'));
+echo $this->formRow($create_update->get('meta_keywords'));
+echo $this->formRow($create_update->get('content'));
+?>
+
+<input type="submit" value="Save Page"/>
+<?php
+echo $this->form()->closeTag();
+?>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+    <title>Customer Invoice</title>
+    <?php
+    // Stylesheets
+    echo $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/png', 'href' => $this->basePath() . '/img/favicon.png'])
+        ->prependStylesheet('/css/backend/invoice.css', ['media' => 'all'])
+        ->prependStylesheet('/css/font-awesome.min.css');
+    ?>
+</head>
+<body>
+<header>
+    <h2>INVOICE</h2>
+    <div id="store_address">
+      <?php
+
+        // If there is no logo, print store name
+        if (empty($store_settings['store_logo']['tmp_name']))
+          echo "<strong>".$store_settings['store_name']."</strong><br/>";
+        else
+          echo "<img class='store-logo' src='/img/layout_images/{$logo_file}'/><br/>";
+
+        echo $store_settings['store_address_line_1'] . "<br/>";
+        echo $store_settings['store_address_line_2'] . "<br/>";
+        echo $store_settings['store_address_city'] . ", " . $store_settings['store_address_state'] . ' ' . $store_settings['store_address_zipcode'] ."<br/>";
+      ?>
+    </div>
+</header>
+<?php echo $this->content; ?>
+</body>
+</html>

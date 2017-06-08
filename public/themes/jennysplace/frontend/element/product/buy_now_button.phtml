@@ -1,0 +1,10 @@
+<?php
+/**
+ * @var Library\Model\Product\Product $product
+ */
+
+if ($this->layout()->hide_prices == true): ?>
+    <a style="color: black; position: absolute; bottom: 18px; left: 42px;"
+       href="https://<?php echo $this->layout()->store_settings['site_url']; ?>/auth?whence=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">
+        <i class="fa fa-sign-in"></i> Sign In To See Price</a>
+<?php endif; ?>

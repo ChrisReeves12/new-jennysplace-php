@@ -1,0 +1,7 @@
+<h2>Search Results</h2>
+<h4><?php echo $result_count; ?> results found for "<?php echo $keywords; ?>"</h4>
+<?php echo $this->render($pagination_view); ?>
+<?php
+    echo $this->render($product_list);
+?>
+<?php echo $this->render($pagination_view); ?>

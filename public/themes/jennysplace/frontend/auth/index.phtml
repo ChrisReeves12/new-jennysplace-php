@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-md-4">
+        <h2><i class="fa fa-sign-in"></i> Sign In</h2>
+        <p>Sign into your account using the form below.</p>
+        <?php
+        if (isset($logged_in) && $logged_in == false)
+        {
+            echo "Username and/or password is incorrect.<br/>";
+        }
+
+        $login_form->prepare();
+        echo $this->form()->openTag($login_form);
+        echo $this->formRow($login_form->get('login_csrf'));
+        echo "<input type='hidden' value='login' name='task'/>";
+        echo "<div class='form-group'>" . $this->formRow($login_form->get('email')->setOptions(['label' => ''])->setAttributes(['class' => 'form-control'])) . "</div>";
+        echo "<div class='form-group'>" .  $this->formRow($login_form->get('password')->setOptions(['label' => ''])->setAttributes(['class' => 'form-control'])) . "</div>";
+
+        echo "<button class='btn btn-default' type='submit'><i class='fa fa-sign-in'></i> Sign In</button>";
+        echo $this->form()->closeTag();
+        ?>
+    </div>
+    <div class="col-md-4">
+        <h3><i class="fa fa-pencil-square"></i> Don't Have An Account?</h3>
+        <p>Creating an account allows you to place orders, track shipping and stay up to date with exclusive offers and discounts! It only takes a few seconds and costs you nothing!</p>
+        <a class="btn btn-success" href="https://<?php echo $this->layout()->store_settings['site_url']; ?>/user/register"><i class="fa fa-edit"></i> Create A New Account</a>
+    </div>
+    <div class="col-md-4">
+        <h3><i class="fa fa-question-circle"></i> Forgot Your Password?</h3>
+        <p>Can't remember your password? No problem! Just enter the email to your account in the form below and you will be emailed instructions on creating a new password.</p>
+        <?php
+        $forgot_pass_form->prepare();
+        echo $this->form()->openTag($forgot_pass_form);
+        echo "<div class='form-group'>" . $this->formRow($forgot_pass_form->get('email')) . "</div>";
+        echo "<button class='btn btn-danger' type='submit'><i class='fa fa-lock'></i> Recover Password</button>";
+        echo $this->form()->closeTag();
+        ?>
+    </div>
+</div>

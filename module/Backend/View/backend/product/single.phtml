@@ -1,0 +1,336 @@
+<h2>Setup Product</h2>
+
+<div class="row">
+    <p><a href="/admin/list/products"><< View All Product</a> | <a href="/admin/product/single">Create New Product</a></p>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#general"><i class="fa fa-gear"></i> General</a></li>
+        <li><a data-toggle="tab" href="#images"><i class="fa fa-file-image-o"></i> Additional Images</a></li>
+        <li><a data-toggle="tab" href="#videos"><i class="fa fa-video-camera"></i> Videos</a></li>
+        <li><a data-toggle="tab" href="#skus"><i class="fa fa-barcode"></i> Product Skus</a></li>
+    </ul>
+</div>
+<div class="tab-content">
+    <!-- General Tab -->
+    <div id="general" class="tab-pane fade in active">
+        <h4><i class="fa fa-gear"></i> General Settings</h4>
+        <?php
+            $image_path = \Library\Service\Settings::get('image_path');
+            $create_update_form->prepare();
+            echo $this->form()->openTag($create_update_form);
+        ?>
+        <div class="row">
+            <div class="col-sm-2">
+                <div style="margin-bottom: 20px;" id="main_photo">
+                    <?php if (!empty($main_photo)): ?>
+                        <div class="delete-image"><span class="fa fa-close"></span></div>
+                        <a data-img-id="<?php echo $main_photo->getId(); ?>" data-fancybox-group="gallery" class="fancybox-effects-d" href="<?php echo $image_path . "/product_images/" . $main_photo->getUrl(); ?>"/>
+                            <img src="<?php echo $image_path . "/product_images/" . $main_photo->getUrl(); ?>"/>
+                        </a>
+                    <?php endif; ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('default_image')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('name')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('date_added')->setAttribute('class', 'form-control ui-datepicker')); ?>
+                </div>
+                <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Save Product</button>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('status_override')->setAttribute('class', 'form-control'));?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('status')->setAttribute('class', 'form-control'));?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('base_price')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('discount_price')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('tax')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('base_weight')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('quantity')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('sort_order')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('product_code')->setAttribute('class', 'form-control')); ?>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('meta_description')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('keywords')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('description')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('show_more_caption')->setAttribute('class', 'form-control')); ?>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('category')->setAttribute('class', 'form-control')); ?>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->formRow($create_update_form->get('add_category')->setAttribute('class', 'btn btn-default')); ?>
+                    <button class="btn btn-default edit-categories">Category Dialog</button>
+                </div>
+                <div class="scrollbox" id="categories">
+                    <?php
+                    if (!empty($product_category_listings))
+                    {
+                        foreach ($product_category_listings as $category)
+                        {
+                            $category_name = $category['name'];
+                            $category_id = $category['id'];
+                            ?>
+                            <div data-cat="<?php echo $category_id; ?>" class="cat_entry">
+                                <a class="cat_delete" data-cat="<?php echo $category_id; ?>" href=""><i class="fa fa-close"></i></a> <?php echo $category_name; ?>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <label style="margin-bottom: 0">Themes</label>
+                <div  id="themes">
+                    <?php
+                    if (count($themes) > 0)
+                    {
+                        echo "<ul class='list-group'>";
+                        foreach ($themes as $theme)
+                        {
+                            // Check if this theme should be checked
+                            $checked = in_array($theme->getId(), $theme_ids) ? "checked='checked'" : "";
+                            echo "<li class='list-group-item list-group-item-check'><input value='{$theme->getId()}' {$checked} name='theme' type='checkbox'/> {$theme->getName()}</li>";
+                        }
+                        echo "</ul>";
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="task" value="create_update"/>
+        <?php
+            echo $this->formRow($create_update_form->get('product_id'));
+            echo $this->formRow($create_update_form->get('category_list'));
+            echo $this->formRow($create_update_form->get('theme_list'));
+            echo $this->formRow($create_update_form->get('category_list_contents'));
+            echo $this->formRow($create_update_form->get('extra_images_contents'));
+            echo $this->formRow($create_update_form->get('skus_contents'));
+            echo $this->formRow($create_update_form->get('default_image_id'));
+            echo $this->form()->closeTag();
+        ?>
+    </div>
+
+    <!-- Additional Images Tab -->
+    <div id="images" class="tab-pane fade in">
+        <h4><i class="fa fa-file-image-o"></i> Add Additional Images</h4>
+        <div class="row">
+            <div class="col-sm-3">
+                <?php
+                $add_images_form->prepare();
+                echo $this->form()->openTag($add_images_form);
+                echo $this->formRow($add_images_form->get('image'));
+                ?>
+                <button class="btn btn-default" name="add_image"><i class="fa fa-plus-circle"></i> Add Images</button>
+                <?php echo $this->form()->closeTag(); ?>
+            </div>
+            <div class="col-sm-9" id='image_area'>
+                <?php
+                if (!empty($additional_images))
+                {
+                    foreach ($additional_images as $additional_image)
+                    {
+                        ?>
+                            <div data-rel-id='<?php echo $additional_image['rel_id']; ?>' data-image='<?php echo $additional_image['url']; ?>' class="multi_img inline">
+                                <img src='<?php echo $image_path  . '/product_images/' . $additional_image['url']; ?>'/><a class='remove_pic' href=''>[Remove]</a>
+                            </div>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Videos Tab -->
+    <div id="videos" class="tab-pane fade in">
+        <h4><i class="fa fa-video-camera"></i> Add Videos</h4>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label>
+                        <span>Video Url</span>
+                        <input type="text" class="form-control"/>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <select class="video_type form-control">
+                        <option>YouTube</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button class="add-video btn btn-default"><i class="fa fa-plus-circle"></i> Add Video</button>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="inline" id='video_area'>
+                    <?php
+                    if (!empty($additional_videos))
+                    {
+                        foreach ($additional_videos as $additional_video)
+                        {
+                            ?>
+                            <div data-rel-id='<?php echo $additional_video['rel_id']; ?>' class="multi_video inline">
+                                <?php echo $additional_video['embed_code']; ?><br/>
+                                <a class='remove_video' href=''>[Remove]</a>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skus Tab -->
+    <div id="skus" class="tab-pane fade in">
+        <h4><i class="fa fa-barcode"></i> Add Additional Skus</h4>
+        <?php
+        $add_skus_form->prepare();
+        echo $this->form()->openTag($add_skus_form);
+        ?>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="options-selector">
+                        <?php echo $this->formRow($add_skus_form->get('options')->setAttribute('class', 'form-control')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="add-option btn btn-default"><i class="fa fa-gear"></i> Add Option</button>
+                    <button class="add-sku btn btn-default"><i class="fa fa-plus-circle"></i> Add Sku</button>
+                </div>
+                <div class="options_container">
+                    <?php
+                    if (count($sku_information['product_options']) > 0)
+                    {
+                        foreach ($sku_information['product_options'] as $product_option)
+                        {
+                            ?>
+                            <div data-id="<?php echo $product_option->getId(); ?>" class="product-option">
+                                <div class="inline"><a class="delete" href=""><span class="fa fa-close"> </span></a></div>
+                                <div class="inline"><?php echo $product_option->getName(); ?></div>
+                                <a class="edit" target="_blank" href="/admin/option/single?id=<?php echo $product_option->getId(); ?>"><span class="fa fa-cog"> </span></a>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+
+                <button class="btn btn-success"><i class="fa fa-save"></i> Save Skus</button>
+            </div>
+            <div class="col-sm-8">
+                <div class="form-sect sku-display">
+                    <?php
+                        if (count($sku_information['skus']) > 0)
+                        {
+                            foreach ($sku_information['skus'] as $sku)
+                            {
+                                if ($sku->getIsDefault())
+                                    continue;
+
+                                $sku_id = $sku->getId();
+                                $sku_qty = $sku->getQuantity();
+                                $sku_number = $sku->getNumber();
+
+                                echo $this->print_sku_dialog($sku, $sku_information['product_options'], $sku_information['status_options']);
+                            }
+                        }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <?php echo $this->form()->closeTag(); ?>
+    </div>
+</div>
+
+<!-- Modal for selecting the category for the product -->
+<div id="editCategoriesModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Category Dialog</h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label for="main-category-select">Select Parent Category</label>
+                                    <select name="main-category-select" class="form-control main-category-select">
+                                        <option value="0">Select Category</option>
+                                        <?php
+                                        foreach($main_categories as $main_category)
+                                        {
+                                            echo "<option value='{$main_category->getId()}'>{$main_category->getName()}</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label>This Product's Categories</label>
+                                <div class="scrollbox dialog-categories-box">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 sub-categories-checkbox-section">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <button class="btn btn-success dialog-add-categories"><i class="fa fa-plus-circle"></i> Add Categories</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-danger dialog-add-categories-close"><i class="fa fa-close"></i> Close Dialog</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.newjennysplace = window.newjennysplace || {};
+    window.newjennysplace.sub_category_data = <?php echo json_encode($sub_categories_table); ?>;
+    window.newjennysplace.category_options = <?php echo json_encode($category_options); ?>;
+</script>

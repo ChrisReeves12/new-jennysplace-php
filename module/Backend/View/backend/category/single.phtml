@@ -1,0 +1,37 @@
+<h2>Setup Category</h2>
+<p><a href="/admin/list/categories"><< View All Categories</a> | <a href="/admin/category/single">Create New Category</a></p>
+<?php
+$create_update_form->prepare();
+echo $this->form()->openTag($create_update_form);
+?>
+<input type="hidden" value="create_update" name="task"/>
+<div class="inline" id="main_photo">
+    <?php if (!empty($main_photo)): ?>
+            <a class="fancybox" href="<?php echo "/img/category_images/" . $main_photo->getUrl(); ?>"/>
+                <img src="<?php echo "/img/category_images/" . $main_photo->getUrl(); ?>"/>
+            </a>
+            <?php endif; ?>
+</div>
+<div class="inline form-sect">
+    <?php
+    echo $this->formRow($create_update_form->get('category_name'));
+    echo $this->formRow($create_update_form->get('inactive'));
+    echo $this->formRow($create_update_form->get('parent'));
+    echo $this->formRow($create_update_form->get('points_to'));
+    echo $this->formRow($create_update_form->get('query_list'));
+    echo $this->formRow($create_update_form->get('sort_order'));
+    echo $this->formRow($create_update_form->get('image'));
+    echo $this->formRow($create_update_form->get('submit'));
+    echo $this->formRow($create_update_form->get('category_id'));
+    ?>
+</div>
+<div class="inline form-sect">
+    <?php
+    echo $this->formRow($create_update_form->get('description'));
+    echo $this->formRow($create_update_form->get('meta_description'));
+    echo $this->formRow($create_update_form->get('keywords'));
+    ?>
+</div>
+<?php
+echo $this->form()->closeTag();
+?>

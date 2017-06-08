@@ -1,0 +1,112 @@
+<div class="top-container container">
+    <div class="row top-row">
+        <div class="main-menu col-md-12 hidden-xs hidden-sm">
+            <?php echo $this->render('element/navigation/main-menu.phtml', ['main_navigation' => $this->layout()->main_navigation]); ?>
+        </div>
+    </div>
+    <div class="row">
+        <nav class="navbar navbar-default hidden-md hidden-lg">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main_navbar">
+                    <i class="fa fa-bars"> </i>
+                </button>
+                <div class="navbar-brand">
+                    Main Menu
+                </div>
+            </div>
+
+            <div class="collapse navbar-collapse" id="main_navbar">
+                <?php echo $this->render('element/navigation/main-menu.phtml', ['main_navigation' => $this->layout()->main_navigation, 'mobile' => true]); ?>
+            </div>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-2 hidden-xs hidden-sm">
+            <div class="row">
+                <div class="login-sect col-xs-12">
+                    <?php echo $this->render('element/auth/login_form', ['login_form' => $this->layout()->login_form]); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="category-sect col-xs-12">
+                    <?php echo $this->render('element/category/vertical_category_list', ['categories' => $this->layout()->categories]) ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-xs-12 maillist-section">
+                            <?php echo $this->render($this->layout()->maillist_form_view); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-10">
+            <div class="row">
+                <div class="banners-sect col-xs-12">
+                    <div class="row banner-container">
+                        <div class="col-xs-12">
+                            <?php echo $this->render_banner('top_banner'); ?>
+                        </div>
+                    </div>
+                    <div class="row banner-container">
+                        <div class="col-xs-12">
+                            <?php echo $this->render_banner('middle_banner'); ?>
+                        </div>
+                    </div>
+                    <div class="row banner-container">
+                        <div class="col-xs-12">
+                            <?php echo $this->render_banner('test_top_banner'); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 mobile-newsletter hidden-md hidden-lg">
+            <form class="form-inline" role="form">
+                <div class="form-group">
+                    <label for="email">Send Newsletter</label>
+                    <p>Stay updated on new products and exclusive offers!</p>
+                    <input type="email" class="form-control" id="email" placeholder="Email">
+                </div>
+                <button style="display: block; margin-top: 5px;" class="btn btn-success"><i class="fa fa-user"></i> Join</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <nav class="navbar navbar-default hidden-md hidden-lg">
+            <?php echo $this->render('element/category/vertical_category_list', ['categories' => $this->layout()->categories, 'mobile' => true]) ?>
+        </nav>
+    </div>
+</div>
+
+<!-- Product List -->
+<h2 class="new-product-heading"><?php echo $home_category->getName(); ?></h2>
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-10">
+            <div class="row">
+                <?php echo $this->render($product_list); ?>
+            </div>
+        </div>
+        <div class="col-md-2 side-images hidden-xs hidden-sm">
+            <img class="img-responsive img-rounded" src="/img/layout_images/jp1.jpg"/>
+            <img class="img-responsive img-rounded" src="/img/layout_images/jp2.jpg"/>
+            <img class="img-responsive img-rounded" src="/img/layout_images/jp3.jpg"/>
+            <img class="img-responsive img-rounded" src="/img/layout_images/jp4.jpg"/>
+        </div>
+    </div>
+</div>
+<div class="lower-links">
+    <?php echo $this->print_content_block('lower_links'); ?>
+</div>
+<div class="about-us">
+    <div class="container">
+        <?php echo $this->print_content_block('about_us'); ?>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+<h1>Administer Discounts</h1>
+<p><a href="/admin/list/discounts"><< View All Discounts</a></p>
+<a class="delete-discount" data-action="" href="">Delete This Discount</a>
+<?php
+$discount_form->prepare();
+?>
+<div>
+    <div class="inline form-sect">
+        <?php
+        echo $this->form()->openTag($discount_form);
+        echo $this->formRow($discount_form->get('discount'));
+        echo $this->formRow($discount_form->get('discount_name'));
+        echo $this->formRow($discount_form->get('discount_script'));
+        echo $this->formRow($discount_form->get('discount_code'));
+        echo $this->formRow($discount_form->get('dollar_hurdle'));
+        ?>
+        <input type="hidden" name="task" value="save_discount"/>
+        <table>
+            <tr>
+                <td><?php echo $this->formRow($discount_form->get('start_date')); ?></td>
+                <td><?php echo $this->formRow($discount_form->get('end_date')); ?></td>
+            </tr>
+        </table>
+        <?php
+        echo $this->formRow($discount_form->get('inactive'));
+        echo $this->formRow($discount_form->get('discount_action_info'));
+        echo $this->formRow($discount_form->get('submit'));
+        ?>
+    </div>
+    <div class="inline form-sect">
+        <table>
+            <tr>
+                <td><?php echo $this->formRow($discount_form->get('discount_action')); ?></td>
+                <td><input name="add_action" type="button" value="Add Action"/></td>
+            </tr>
+        </table>
+        <div class="scrollbox" id="discount_actions">
+          <?php
+            echo $discount_action_content;
+          ?>
+        </div>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>
+<div style="border-top: 1px #CCCCCC; solid; padding-top: 10px;">
+
+    <h3>Edit Discount Actions</h3>
+    <a class="delete-action" data-action="" href="">Delete This
+        Discount Action</a>
+    <?php
+    $discount_action_form->prepare();
+    echo $this->form()->openTag($discount_action_form);
+    echo $this->formRow($discount_action_form->get('discountaction'));
+    echo $this->formRow($discount_action_form->get('action_name'));
+    ?>
+    <table>
+        <tr>
+            <?php
+            echo "<td>" . $this->formRow($discount_action_form->get('shipping_discount')) . "</td>";
+            echo "<td>" . $this->formRow($discount_action_form->get('shipping_discount_type')) . "</td>";
+            ?>
+        </tr>
+    </table>
+    <?php
+    echo $this->formRow($discount_action_form->get('shipping_method'));
+    ?>
+    <table>
+        <tr>
+            <?php
+            echo "<td>" . $this->formRow($discount_action_form->get('product_total_discount')) . "</td>";
+            echo "<td>" . $this->formRow($discount_action_form->get('product_discount_type')) . "</td>";
+            ?>
+        </tr>
+    </table>
+    <input type="hidden" value="save_discount_action" name="task"/>
+    <?php
+    echo $this->formRow($discount_action_form->get('submit'));
+    echo $this->form()->closeTag();
+    ?>
+
+</div>
+<script>
+    $("input.date").datepicker({
+        inline: true
+    })
+</script>

@@ -1,0 +1,26 @@
+<h2>Store Settings</h2>
+<div class="form-sect">
+<?php
+$general_form->prepare();
+echo $this->form()->openTag($general_form);
+
+// Load form settings and set the values
+foreach ($settings as $setting_name => $setting)
+{
+
+    if ($general_form->get($setting_name) instanceof \Zend\Form\Element\File)
+    {
+        echo $this->formRow($general_form->get($setting_name));
+    }
+    else
+    {
+        $general_form->get($setting_name)->setValue($setting);
+        echo $this->formRow($general_form->get($setting_name));
+    }
+}
+?>
+<input type='submit' value="Save Settings"/>
+<?php
+echo $this->form()->closeTag();
+?>
+</div>

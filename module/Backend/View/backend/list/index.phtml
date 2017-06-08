@@ -1,0 +1,126 @@
+<?php
+
+    // Get query identifyers
+    $identifyer_machine_name = isset($identifyer[0]) ? $identifyer[0] : 'id';
+    $identifyer_name = isset($identifyer[1]) ? $identifyer[1] : 'Id';
+?>
+
+<h3><?php echo $list_info['name']; ?></h3>
+<nav class="list_nav">
+    <form method="get">
+        <input type="hidden" name="task" value="search"/>
+        <ul>
+            <?php if (!$hide_create): ?>
+                <li><a class="create_new" href="<?php echo $list_info['single_url']; ?>">Create New</a></li>
+            <?php endif; ?>
+            <li><a data-element="<?php echo strtolower($list_info['name']); ?>" class="delete" href="">Delete Items</a></li>
+            <li><input placeholder="Search" value="<?php echo isset($_GET['keyword']) ? $_GET['keyword'] : ''; ?>" name="keyword" type="text"/></li>
+            <li>
+                <select name="filter">
+                    <?php
+                        foreach ($list_info['parameters'] as $key => $value)
+                        {
+                            if (!empty($_GET['filter']))
+                            {
+                                if ($_GET['filter'] == $key)
+                                {
+                                    $selected = "selected='selected'";
+                                }
+                                else
+                                {
+                                    $selected = "";
+                                }
+                            }
+                            echo "<option $selected value='{$key}'>$value</option>";
+                        }
+                    ?>
+                </select>
+            </li>
+            <li><input value="Search" type="submit"/></li>
+        </ul>
+    </form>
+</nav>
+<div style="margin-bottom: 15px;" class="paginator">
+    Page: <select class="page_select">
+        <?php
+            for($count = 1; $count <= $max_page_num; $count++)
+            {
+                $selected = ($count == $cur_page) ? "selected='selected'" : "";
+                echo "<option {$selected} value='{$count}'>".$count."</option>";
+            }
+        ?>
+    </select>
+    <span style="margin-left: 10px;">
+        <?php if ($cur_page > 1):
+
+                $query_vars = $_GET;
+                $query_vars['page'] = $cur_page - 1;
+                $query_string = http_build_query($query_vars);
+            ?>
+
+            <a href="?<?php echo $query_string; ?>"><< Back</a>
+        <?php endif; ?>|
+        <?php if (($cur_page + 1) < ($max_page_num+1)):
+
+            $query_vars = $_GET;
+            $query_vars['page'] = $cur_page + 1;
+            $query_string = http_build_query($query_vars);
+
+            ?>
+            <a href="?<?php echo $query_string; ?>">Next >></a>
+        <?php endif; ?>
+    </span>
+</div>
+<table class="table">
+    <?php if (!empty($list_items)): ?>
+    <tr>
+        <th> </th>
+        <?php
+        // List headings
+        foreach ($list_items[0] as $key => $value)
+        {
+            echo "<th>$key</th>";
+        }
+        ?>
+        <?php if (!isset($list_info['hide_edit']) || !$list_info['hide_edit']): ?>
+            <th> </th>
+        <?php endif; ?>
+        <th> </th>
+    </tr>
+    <?php
+        // List entities
+        foreach ($list_items as $list_item)
+        {
+            ?>
+            <tr>
+                <td><input data-id="<?php echo $list_item[$identifyer_name]; ?>" type="checkbox"/></td>
+                <?php
+                foreach ($list_item as $key => $value)
+                {
+                    echo "<td>$value</td>";
+                }
+                ?>
+
+                <?php if (!isset($list_info['hide_edit']) || !$list_info['hide_edit']): ?>
+                    <td><a class="btn btn-default" href="<?php echo $list_info['single_url'] ?>?<?php echo $identifyer_machine_name; ?>=<?php echo $list_item[$identifyer_name]; ?>"><i class="fa fa-edit"></i> Edit</a></td>
+                <?php endif; ?>
+
+                <td><a data-element="<?php echo strtolower($list_info['name']); ?>" data-id="<?php echo $list_item[$identifyer_name]; ?>" class="btn btn-default list_item_delete" href=""><i class="fa fa-remove"></i> Delete</a></td>
+            </tr>
+            <?php
+        }
+    endif;
+    ?>
+</table>
+<div style="margin-top: 15px;" class="paginator">
+    Page: <select class="page_select">
+        <?php
+        for($count = 1; $count <= $max_page_num; $count++)
+        {
+            $selected = ($count == $cur_page) ? "selected='selected'" : "";
+            echo "<option {$selected} value='{$count}'>".$count."</option>";
+        }
+        ?>
+    </select>
+    <span style="margin-left: 10px;"><?php if ($cur_page > 1): ?><a href="?page=<?php echo $cur_page - 1; ?>"><< Back</a> <?php endif; ?>| <?php if (($cur_page + 1) < ($max_page_num+1)): ?><a href="?page=<?php echo $cur_page + 1; ?>">Next >></a><?php endif; ?></span>
+</div>

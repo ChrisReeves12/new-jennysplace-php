@@ -1,0 +1,232 @@
+<?php
+echo $this->doctype();
+$cart_item_count = 0;
+$cart_total = number_format(0, 2);
+
+// Get user information
+if (!is_null($user))
+{
+    $user_id = $user->getId();
+    $cart = $user->getSavedCart();
+    if (!is_null($cart))
+    {
+        $cart_total = number_format($cart->getSubTotal(), 2, '.', '');
+        $cart_grand_total = number_format($cart->getTotal(), 2, '.', '');
+        $cart_item_count = count($cart->getShopListElements());
+        $discount_amount = $cart->getDiscountAmount();
+        $order_tax = $cart->getTax();
+        $shipping_cost = $cart->getCurrentShippingCost();
+        $store_credit = $cart->calculateStoreCredit();
+    }
+}
+?>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="google-site-verification" content="9CgLLnKCMuZeoDMmlD9Mir8BOY-eTXanlpLkM5Rxkwc" />
+    <?php echo $this->headTitle()->prepend($store_settings['site_title'])->setSeparator(' | ')->setAutoEscape(false) ?>
+
+    <?php
+        echo $this->headMeta()
+            ->prependProperty('keywords', 'wholesale jewelry, wholesale apparel, wholesale jewelers, wholesale fashion jewelry')
+            ->prependProperty('description', 'With over 100,000 items and products on our website and in our store location, New Jenny\'s Place is one of the largest suppliers of wholesale jewelry and apparel in the Southeast.')
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+
+    <!-- Le styles -->
+    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/png', 'href' => $this->basePath() . '/img/favicon.png'))
+        ->prependStylesheet($this->basePath('/ext/fancybox/source/jquery.fancybox.css?v=2.1.5'))
+        ->prependStylesheet($this->basePath('/ext/fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5'))
+        ->prependStylesheet($this->basePath('/ext/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7'))
+        ->prependStylesheet($this->basePath('js/flexslider/flexslider.css'))
+        ->prependStylesheet($this->basePath('css/font-awesome.min.css'))
+        ->prependStylesheet($this->basePath('themes/' . $theme . '/css/style.css'))
+        ->prependStylesheet($this->basePath('css/bootstrap-theme.css'))
+        ->prependStylesheet($this->basePath('css/bootstrap.css')) ?>
+
+    <script>
+        window.newjennysplace = window.newjennysplace || {};
+        window.newjennysplace.page = window.newjennysplace.page || {};
+        window.newjennysplace.components = window.newjennysplace.components || {};
+    </script>
+
+    <!-- Scripts -->
+    <?php echo $this->headScript()
+        ->prependFile($this->basePath('js/layout.js'))
+        ->prependFile('/js/react-dom.js')
+        ->prependFile('/js/react.js')
+        ->prependFile($this->basePath('js/flexslider/jquery.flexslider.js'))
+        ->prependFile('/ext/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5')
+        ->prependFile('/ext/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7')
+        ->prependFile('/ext/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6')
+        ->prependFile('/ext/fancybox/lib/jquery.mousewheel-3.0.6.pack.js')
+        ->prependFile('/ext/fancybox/source/jquery.fancybox.js?v=2.1.5')
+        ->prependFile($this->basePath('js/bootstrap.min.js'))
+        ->prependFile($this->basePath('js/jquery.min.js'))
+        ->prependFile($this->basePath('js/respond.min.js'), 'text/javascript', array('conditional' => 'lt IE 9',))
+        ->prependFile($this->basePath('js/html5shiv.min.js'),   'text/javascript', array('conditional' => 'lt IE 9',))
+    ;
+    ?>
+</head>
+<body>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-W943S8"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-W943S8');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Header -->
+<header>
+    <div class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <ul class="nav navbar-nav">
+                <?php if (!is_null($user)): ?>
+                    <li><a href="https://<?php echo $store_settings['site_url']; ?>/user/account">Hello, <?php echo $user->getFirstName(); ?>!</a></li>
+                    <li><a href="https://<?php echo $store_settings['site_url']; ?>/user/account"><i class="fa fa-user"></i> My Account</a></li>
+                    <?php if ($admin_logged_in) { ?>
+                        <li><a href="https://<?php echo $store_settings['site_url']; ?>/admin"><i class="fa fa-gear"></i> Admin Panel</a></li>
+                    <?php }; ?>
+                    <li><a href="/auth/logout"><i class="fa fa-sign-out"></i> Sign Out</a></li>
+                <?php else: ?>
+                    <li><a href="https://<?php echo $store_settings['site_url']; ?>/user/register"><i class="fa fa-pencil-square"></i> Create an Account</a></li>
+                    <li><a href="https://<?php echo $store_settings['site_url']; ?>/auth"><i class="fa fa-sign-in"></i> Sign In</a></li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row top-header-row">
+            <div class="header-logo col-md-4">
+              <img class="img-responsive" src="/img/layout_images/Logo.png"/>
+            </div>
+            <div class="header-search col-md-4">
+                <form role="form" method="get" action="/search">
+                    <div class="input-group">
+                        <input name="keywords" placeholder="Search" type="text" class="form-control"/>
+                        <span class="input-group-addon frontend-search-submit"><i class="glyphicon glyphicon-search"></i></span>
+                    </div>
+                </form>
+            </div>
+            <div class="header-promo col-md-2">
+                <?php echo $this->print_content_block('header_shipping_promo'); ?>
+            </div>
+            <div class="cart-display col-md-2">
+                <div id="cart"> </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Print messages -->
+<div class="messages container">
+    <?php if (!empty($this->error_message)): ?>
+    <div class="container">
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $this->error_message; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <?php if (!empty($message = $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR))): ?>
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $message; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if (!empty($this->success_message)): ?>
+        <div class="container">
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <?php echo $this->success_message; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if (!empty($message = $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS))): ?>
+        <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $message; ?>
+        </div>
+    <?php endif; ?>
+</div>
+
+<!-- Main Section -->
+<section class="main-section">
+    <?php
+        echo (!empty($this->main_layout)) ? $this->main_layout : $this->content;
+    ?>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="footer-sect">
+                    <?php echo $this->print_content_block('footer_address'); ?>
+                </div>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <div class="footer-sect">
+                    <div class="social-icons">
+                        <?php echo $this->print_content_block('footer_social_icons'); ?>
+                    </div>
+                    <img src="/img/layout_images/Logo.png"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lower-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <img class="img-responsive" src="/img/layout_images/comodologo.png"/>
+                </div>
+                <div class="col-sm-3">
+                    <img class="img-responsive" src="/img/layout_images/paypallogo.jpg"/>
+                </div>
+                <div class="col-sm-3">
+                    <img class="img-responsive" src="/img/layout_images/credit_card_logos.png"/>
+                </div>
+                <div class="col-sm-3">
+                    <img class="img-responsive" src="/img/layout_images/ups.gif"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 copyright">
+                   Copyright © <?php echo date('Y'); ?> by New Jenny's Place | Website designed by Christopher Reeves
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+
+    // Inject variables into javascript globals
+    window.newjennysplace.page.cart_total = <?php echo $cart_total ?? 0; ?>;
+    window.newjennysplace.page.cart_grand_total = <?php echo $cart_grand_total ?? 0; ?>;
+    window.newjennysplace.page.cart_qty = <?php echo $cart_item_count ?? 0; ?>;
+    window.newjennysplace.page.order_tax = <?php echo $order_tax ?? 0; ?>;
+    window.newjennysplace.page.order_discount = <?php echo $discount_amount ?? 0; ?>;
+    window.newjennysplace.page.shipping_cost = <?php echo $shipping_cost ?? 0; ?>;
+    window.newjennysplace.page.store_credit = <?php echo $store_credit ?? 0; ?>;
+    window.newjennysplace.page.theme = "<?php echo $theme; ?>";
+    window.newjennysplace.page.image_path = "<?php echo $store_settings['image_path']; ?>"
+</script>
+<script src="<?php echo $this->basePath('themes/' . $theme . '/js/components.js'); ?>"></script>
+<script>
+    // Make search button work
+    $('.frontend-search-submit').click(function () {
+        $(this).parents('form').submit();
+        $(this).addClass('frontend-search-submit-click')
+    });
+</script>
+</body>
+</html>

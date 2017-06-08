@@ -1,0 +1,17 @@
+<?php
+/**
+ * @var MSFieldset $element
+ */
+
+use Library\Form\MSFieldset;
+
+$elements = $element->getElements();
+
+if (!empty($elements) && ($element instanceof MSFieldset))
+{
+    foreach ($elements as $form_element)
+    {
+        echo '<div class="form-group">' . $this->formRow($form_element) . '</div>';
+    }
+}
+

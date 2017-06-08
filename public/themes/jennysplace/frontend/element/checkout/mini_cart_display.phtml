@@ -1,0 +1,20 @@
+<?php
+/**
+ * @var \Library\Model\Shop\ShopList\Cart $cart
+ */
+
+// Defaults
+$amount = "$0.00";
+$item_count = 0;
+
+// Get info on cart
+if ($cart instanceof \Library\Model\Shop\ShopList\Cart)
+{
+    $amount = $this->money($cart->getSubTotal());
+    $item_count = count($cart->getShopListElements());
+}
+?>
+
+Cart <span class="glyphicon glyphicon-shopping-cart"></span>
+<span class="highlight"><?php echo $item_count; ?></span> | <span class="highlight"><?php echo $amount ?></span><br/>
+<a href="/shopping-cart" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-shopping-cart"></i> Proceed To Checkout</a>

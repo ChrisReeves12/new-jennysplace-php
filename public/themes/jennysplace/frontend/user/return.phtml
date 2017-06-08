@@ -1,0 +1,67 @@
+
+<h2>Product Return</h2>
+<p><a class="btn btn-success" href="/user/account"><i class="fa fa-arrow-left"></i> View Account</a></p>
+<p style="color: #be0000; font-weight: bold;">
+    <i class="fa fa-warning"></i> Returns are only allowed on products that have been received defective, broken or incorrect. Please note that all
+    requests for returns on products in your order must be issued within 48 hours of delivery of your order. Requests for returns
+    after 48 hours of delivery of your order will be rejected. Thank you for your cooperation. Read our return policy by clicking <a href="/page/shipping-return-policy">here</a>.
+</p>
+<p>When requesting a return on a product in your order, please use the form below to explain why
+    you would like to return the product and we will be respond to your inquiry as soon as possible.</p>
+<div class="row">
+    <div class="col-sm-6">
+        <?php
+        $cust_create_update->prepare();
+        echo $this->form()->openTag($cust_create_update);
+        echo "<div class='form-group'>";
+        echo $this->formRow($cust_create_update->get('message')->setAttribute('class', 'form-control'));
+        echo "</div>";
+        echo "<div class='form-group'>";
+        echo $this->formRow($cust_create_update->get('admin_message')->setAttribute('class', 'form-control'));
+        echo "</div>";
+        ?>
+        <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Save Return Request</button>
+        <?php
+        echo $this->form()->closeTag();
+        ?>
+    </div>
+    <div class="col-sm-6">
+        <h4>Product Information</h4>
+
+        <?php
+        $sku = $shop_list_element->getSku();
+
+        // Load sku attributes
+        $soovs = $sku->getSkuOptionOptionValues();
+        echo "<ul class='product_attributes list-group'>";
+        echo "<li class='list-group-item list-group-item-heading' style='font-weight: bold'>" . $shop_list_element->getSku()->getProduct()->getName() . "</li>";
+
+        if (count($soovs) > 0)
+        {
+            foreach ($soovs as $soov)
+            {
+                $option_value_rel = $soov->getOptionOptionValue();
+                echo "<li class='list-group-item'>".$option_value_rel->getOption()->getName().": ".$option_value_rel->getOptionValue()->getName()."</li>";
+            }
+        }
+
+        echo "</ul>";
+        ?>
+
+        <?php
+        if (!is_null($return))
+        {
+            ?>
+            <h4>Return Information</h4>
+            <ul class='return_info'>
+                <li>Status: <?php echo $return->getStatus(); ?></li>
+                <li>Date Created: <?php echo $return->getDateCreated()->format('m/d/Y'); ?></li>
+            </ul>
+
+            <h4>Response From Administrator</h4>
+            <p class="returns_response"><?php echo $return->getAdminMessage(); ?></p>
+            <?php
+        }
+        ?>
+    </div>
+</div>

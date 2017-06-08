@@ -1,0 +1,12 @@
+<h2>Setup Tax</h2>
+<p><a href="/admin/list/taxes"><< View All Taxes</a> | <a href="/admin/tax/single">Create New Tax</a></p>
+
+<?php
+echo $this->form()->openTag($create_update);
+echo $this->formRow($create_update->get('rate'));
+echo $this->formRow($create_update->get('state'));
+echo $this->formRow($create_update->get('inactive'));
+?>
+<input type="submit" value="Save"/>
+<?php
+echo $this->form()->closeTag();

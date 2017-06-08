@@ -1,0 +1,52 @@
+<h2>Administer Banner</h2>
+<p><a href="/admin/list/banners"><< View All Banners</a></p>
+<div>
+    <div class="inline form-sect">
+        <?php
+        $banner_form->prepare();
+        echo $this->form()->openTag($banner_form);
+        echo $this->formRow($banner_form->get('label'));
+        echo $this->formRow($banner_form->get('anim_type'));
+        echo $this->formRow($banner_form->get('anim_speed'));
+        echo $this->formRow($banner_form->get('delay_time'));
+        echo $this->formRow($banner_form->get('slide_direction'));
+        echo $this->formRow($banner_form->get('show_nav'));
+        echo $this->formRow($banner_form->get('show_arrows'));
+        echo $this->formRow($banner_form->get('submit'));
+        ?>
+        <?php echo $this->form()->closeTag(); ?>
+    </div>
+    <div class="inline">
+        <?php
+        $add_photos_form->prepare();
+        echo $this->form()->openTag($add_photos_form);
+        echo $this->formRow($add_photos_form->get('image'));
+
+        echo $this->form()->closeTag($add_photos_form);
+        ?>
+        <div id="additional_images" class="scrollbox" style="height: 400px;">
+            <?php
+              // Get banner slide information
+              if (!is_null($banner))
+              {
+                  $banner_slides = $banner->getBannerSlides();
+                  if (count($banner_slides) > 0)
+                  {
+                    foreach ($banner_slides as $banner_slide)
+                    {
+                      ?>
+                        <div data-image-id="<?php echo $banner_slide->getImage()->getId(); ?>" class="banner_slide">
+                            <div class="fa fa-close delete"></div>
+                            <img class="banner-img" src="/img/banner_images/<?php echo $banner_slide->getImage()->getUrl(); ?>"/>
+                            <div class="banner-slide-info">
+                                <input value="<?php echo $banner_slide->getUrl(); ?>" type="text" class="banner-slide-link"/>
+                            </div>
+                        </div>
+                      <?php
+                    }
+                  }
+              }
+            ?>
+        </div>
+    </div>
+</div>

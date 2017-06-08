@@ -1,0 +1,25 @@
+<?php
+/**
+ * @var \Library\Form\Subscription\MailistSignup $maillist_form
+ */
+?>
+
+<?php
+$maillist_form->prepare();
+$maillist_form->setAttribute('action', $this->url('mailsignup'));
+?>
+
+<p class="maillist-title"><i class="fa fa-envelope"></i> <strong>Send Newsletter</strong></p>
+<p>Stay updated on new products and exclusive offers!</p>
+<div class="maillist">
+    <?php echo $this->form()->openTag($maillist_form); ?>
+        <div class="form-group">
+            <?php echo $this->formRow($maillist_form->get('name')->setAttributes(['class' => 'form-control', 'placeholder' => 'Name'])); ?>
+        </div>
+        <div class="form-group">
+            <?php echo $this->formRow($maillist_form->get('email')->setAttributes(['class' => 'form-control', 'placeholder' => 'Email'])); ?>
+            <button class="btn btn-success"><i class="fa fa-user-plus"></i> Join</button>
+        </div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>
+

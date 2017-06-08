@@ -1,0 +1,8 @@
+body h2,
+body h3,
+body h4 {
+  margin-top: 20px;
+}
+body section.main-section {
+  min-height: 600px;
+}

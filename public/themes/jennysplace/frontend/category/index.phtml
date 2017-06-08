@@ -1,0 +1,39 @@
+<?php
+    if (isset($error))
+    {
+        echo "<p class='text-center text-danger'><strong><i class='fa fa-question-circle'></i> The category cannot be found.</strong></p>";
+        return;
+    }
+?>
+
+<?php
+if (!is_null($pagination_view))
+    echo $this->render($pagination_view);
+?>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="breadcrumb-container"><?php echo $this->print_breadcrumb($this->layout()->breadcrumb_data); ?></div>
+    </div>
+</div>
+<h2><?php echo $category->getName(); ?></h2>
+<div class="sub-categories">
+    <?php
+      if (!empty($sub_categories))
+      {
+        foreach ($sub_categories as $sub_category)
+        {
+          if ($sub_category->getInactive())
+            continue;
+
+          echo "<a class='sub-category' href='".$this->url('category', ['handle' => $sub_category->getPage()->getUrlHandle()])."'>";
+          echo $sub_category->getName();
+          echo "</a>";
+        }
+      }
+    ?>
+</div>
+<?php
+echo $this->render($product_list);
+if (!is_null($pagination_view))
+    echo $this->render($pagination_view);
+?>

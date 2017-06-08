@@ -1,0 +1,60 @@
+<h2>Administer Option</h2>
+<p><a href="/admin/list/options"><< View All Product Options</a></p>
+<div class="inline form-sect">
+    <?php
+
+    $options_form->prepare();
+    echo $this->form()->openTag($options_form);
+
+    // Fill in option name
+    if (!is_null($option))
+    {
+      $options_form->get('name')->setValue($option->getName());
+    }
+
+    echo $this->formRow($options_form->get('name'));
+
+    ?>
+
+    <input type='hidden' name='task' value='save_option'/>
+    <label for="values">Option Values</label>
+
+    <div style="margin-bottom: 20px;">
+        <select style="display: inline;" id="values" name="values">
+            <option value="0">Select Value</option>
+            <?php
+            foreach ($options as $option_id => $option_value)
+            {
+                echo "<option value='".$option_id."'>".$option_value."</option>";
+            }
+            ?>
+        </select>
+        <a href="" class="delete_value">Delete Value</a> | <a href="" class="update_value">Update Value</a>
+    </div>
+
+    <button class="add_value">Add Value</button> <button class="create_value">Create New Value</button>
+
+    <div style="height: 400px;" class="scrollbox">
+        <?php
+          // Fill in the values if applicable
+          if (!is_null($option))
+          {
+            $option_value_rels = $option->getOptionOptionValues();
+            if (count($option_value_rels) > 0)
+            {
+              foreach ($option_value_rels as $option_value_rel)
+              {
+                $option_value = $option_value_rel->getOptionValue();
+                echo "<div class='option_value_entry' data-value-id='{$option_value->getId()}'><a data-value-id='' href=''>[Close]</a> {$option_value->getName()}</div>";
+              }
+            }
+          }
+        ?>
+    </div>
+
+    <?php
+    echo $this->formRow($options_form->get('value_data'));
+    echo $this->formRow($options_form->get('submit'));
+    echo $this->form()->closeTag();
+ ?>
+</div>

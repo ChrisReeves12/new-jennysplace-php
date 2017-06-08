@@ -1,0 +1,117 @@
+<div class="col-xs-12">
+    <h2><i class="fa fa-shopping-cart"></i> Shopping Cart</h2>
+    <?php if (!empty($cart_items)): ?>
+        <?php echo $this->form()->openTag($checkout_form->setAttribute('disabled', 'disabled')); ?>
+        <?php $checkout_form->prepare(); ?>
+        <?php echo $this->formRow($checkout_form->get('checkout_csrf')); ?>
+        <?php echo $this->render('element/cart/product_listing', ['cart_items' => $cart_items]); ?>
+    <?php else: ?>
+        <p class="text-center">There are no items in your shopping cart.</p>
+    <?php endif; ?>
+</div>
+<?php if (!empty($cart_items)): ?>
+        <?php
+            // Check for minimum order total
+            if ($saved_cart->getSubTotal() < $minimum_product_total)
+            {
+                ?>
+                <h4 style="text-align: center;">Your order's product total must be at least <?php echo $this->money($minimum_product_total); ?></h4>
+                <?php
+
+                return;
+            }
+        ?>
+        <div class="row">
+            <div class="col-sm-4">
+                <h4>Have a discount code?</h4>
+                <?php
+                echo $this->render('element/form/collection', ['element' => $checkout_form->get('discount_code')]);
+                echo "<a class='add_discount btn btn-success'><span style='margin-right: 3px;' class='fa fa-plus-square'> </span> Add Discount</a>";
+                ?>
+            </div>
+            <div class="col-sm-4">
+                <?php
+                $discount_rels = $saved_cart->getShopListDiscounts()->toArray();
+                if (!empty($discount_rels))
+                {
+                    echo "<ul>";
+                    foreach ($discount_rels as $discount_rel)
+                    {
+                        $discount = $discount_rel->getDiscount();
+                        echo "<li><a class='delete_discount' data-discount-rel-id='".$discount_rel->getId()."' href=''><span class='fa fa-minus-square'></span> </a>" . $discount->getName() . "</li>";
+                    }
+                    echo "</ul>";
+                }
+                ?>
+            </div>
+    </div>
+<div class="checkout_forms">
+    <h2><i class="fa fa-user"></i> Customer Information</h2>
+    <div class="row">
+        <div class="col-sm-6">
+            <h5>Billing Address</h5>
+            <?php echo $this->render('element/form/collection', ['element' => $checkout_form->get('billing_address')]); ?>
+        </div>
+        <div class="col-sm-6">
+            <h5>Shipping Address</h5>
+            <div class="form-group">
+                <input class="btn btn-default" value="Same As Billing Address" type="button" name="same_as_billing"/>
+            </div>
+            <?php echo $this->render('element/form/collection', ['element' => $checkout_form->get('shipping_address')]); ?>
+            <a class="save-addresses btn btn-success"><i class="fa fa-save"></i> Save Addresses Changes</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <h2><i class="fa fa-truck"></i> Shipping Methods</h2>
+        <div class='shipping_methods_section'> </div>
+    </div>
+</div>
+<div class="payment_info">
+    <h2><i class="fa fa-money"></i> Payment</h2>
+    <div class="secure-note">
+        <h4><i class="fa fa-lock"></i> Your Information Is Always Kept Safe And Secure</h4>
+        <p>None of your payment information is kept on file and is never stored in our database. In addition, your information is
+        always sent via a 128-bit SSL encrypted, secure connection to our payment processor so you can rest assured knowing your
+        information will not end up in the wrong hands.</p>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <h5>Totals</h5>
+            <div id="order_totals"> </div>
+        </div>
+
+        <?php if ($saved_cart->getStoreCredit() > 0 && $saved_cart->getTotal() == 0): ?>
+            <div class="payment-methods">
+                <div class="col-sm-8">
+                    <p>Your store credit covers the cost of your order.</p>
+                    <button type="submit" class="btn btn-success">Submit Order <i class="fa fa-arrow-right"></i></button>
+                    <input type="hidden" name="pay_info[pay_method]" value="Store Credit/Voucher">
+                </div>
+            <?php else: ?>
+            <div class="col-sm-4">
+                <h5>Credit Card Information</h5>
+                <?php
+                // Print error messages
+                if (!empty($order_response) && is_array($order_response))
+                {
+                    $success = $order_response['success'];
+                    if (!$success)
+                    {
+                        echo "<div class='credit_card_error'>{$order_response['response_text']}</div>";
+                    }
+                }
+                ?>
+                <?php echo $this->render('element/checkout/credit_card_form', ['pay_info_form' => $checkout_form->get('pay_info')]); ?>
+            </div>
+            <div class="col-sm-4">
+                <h5>Pay With PayPal</h5>
+                <input type='image' style="outline-width: 0;" class='paypal_submit' src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"/>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>
+<?php endif; ?>

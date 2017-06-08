@@ -1,0 +1,79 @@
+{
+  "theme_name": "New Jenny's Place 3.0",
+  "description": "The official theme for New Jenny's Place",
+
+  "banners": {
+    "Default": {
+      "0":"layout_right"
+    },
+    "Frontend\\Controller\\Home": {
+      "index": {
+        "0":"home_page_main",
+        "1":"home_page_lower_1",
+        "2":"home_page_lower_2",
+        "3":"home_page_lower_3",
+        "4":"home_page_lower_4"
+      }
+    }
+  },
+
+  "css": {
+    "Frontend\\Controller\\Home": {
+      "index": {
+        "0": "home.css"
+      }
+    },
+
+    "Frontend\\Controller\\Product": {
+      "index": {
+        "0": "product.css"
+      }
+    },
+
+    "Frontend\\Controller\\Category": {
+      "index": {
+        "0": "categories.css"
+      }
+    },
+
+    "Frontend\\Controller\\Cart": {
+      "index": {
+        "0": "cart.css"
+      },
+      "receipt": {
+        "0": "cart.css"
+      }
+    },
+
+    "Frontend\\Controller\\User": {
+      "account": {
+        "0": "account.css"
+      },
+      "order": {
+        "0": "order.css"
+      },
+      "register": {
+        "0": "register.css"
+      },
+      "return": {
+        "0": "return.css"
+      }
+    },
+
+    "Frontend\\Controller\\Auth": {
+      "index": {
+        "0": "login.css"
+      },
+      "forgotpassword": {
+        "0": "forgot-password.css"
+      },
+      "changepass": {
+        "0": "changepass.css"
+      }
+    }
+  },
+
+  "js": {
+
+  }
+}

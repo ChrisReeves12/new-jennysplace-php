@@ -1,0 +1,13 @@
+<h2>Setup Shipping Method</h2>
+<p><a href="/admin/list/shipping_methods"><< View All Shipping Methods</a> | <a href="/admin/shipping-method/single">Create New Shipping Method</a></p>
+
+<?php
+$create_update->prepare();
+echo $this->form()->openTag($create_update);
+echo $this->formRow($create_update->get('carrier'));
+echo $this->formRow($create_update->get('name'));
+echo $this->formRow($create_update->get('carrier_id'));
+echo $this->formRow($create_update->get('inactive'));
+echo "<input type='submit' value='Save Shipping Method'/>";
+echo $this->form()->closeTag();
+?>

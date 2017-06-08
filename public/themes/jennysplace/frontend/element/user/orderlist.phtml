@@ -1,0 +1,38 @@
+<?php
+/**
+ * @var \Library\Model\Shop\ShopList\Order[] $orders
+ */
+
+// Create table of orders
+if (!empty($orders))
+{
+    ?>
+    <table class="table">
+        <tr>
+            <th>Order #</th>
+            <th>Status</th>
+            <th>Pay Method</th>
+            <th>Sub-Total</th>
+            <th>Total</th>
+            <th>Date Ordered</th>
+            <th> </th>
+        </tr>
+        <?php
+            foreach ($orders as $order)
+            {
+                ?>
+                <tr>
+                    <td><?php echo $order->getOrderNumber(); ?></td>
+                    <td><?php echo $order->getStatus(); ?></td>
+                    <td><?php echo $order->getPaymentMethod()->getName(); ?></td>
+                    <td><?php echo '$'.$order->getSubTotal(); ?></td>
+                    <td><?php echo '$'.$order->getTotal(); ?></td>
+                    <td><?php echo $order->getDateCreated()->format('m/d/Y'); ?></td>
+                    <td><a class="btn btn-default" href="<?php echo $this->url('user', ['action' => 'order', 'param1' => $order->getOrderNumber()]) ?>"><span class="fa fa-search"> </span> View</a></td>
+                </tr>
+            <?php
+            }
+        ?>
+    </table>
+    <?php
+}

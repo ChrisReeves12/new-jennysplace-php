@@ -1,0 +1,77 @@
+<h1>Email Campaign</h1>
+<a href="/admin/list/email_campaigns"><< View All Email Campaigns</a>
+<?php
+$create_update_form->prepare();
+echo $this->form()->openTag($create_update_form);
+?>
+<input type="hidden" name="task" value="save_campaign"/>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <?php echo $this->formRow($create_update_form->get('name')->setAttribute('class', 'form-control')); ?>
+        </div>
+
+        <div class="form-group">
+            <?php echo $this->formRow($create_update_form->get('inactive')->setAttribute('class', 'form-group')); ?>
+        </div>
+
+        <div class="form-inline">
+            <button class="btn btn-success"><i class="fa fa-save"></i> Save Campaign</button>
+            <?php if (isset($campaign)): ?>
+                <?php if (!$campaign->hasLaunched()): ?>
+                <button id="launch_campaign" data-id="<?php echo $campaign->getId(); ?>" class="btn btn-success"><i class="fa fa-rocket"></i> Launch Campaign</button>
+                <?php else: ?>
+                <button id="unlaunch_campaign" data-id="<?php echo $campaign->getId(); ?>" class="btn btn-success"><i class="fa fa-ban"></i> Stop Campaign</button>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <?php if (isset($campaign)): ?>
+        <h5>Campaign Status</h5>
+        <p>
+            <strong>Launch Status: </strong> <?php echo ($campaign->hasLaunched()) ? 'Launched' : 'Not Launched' ?><br/>
+            <strong>Last Launched: </strong> <?php echo (!empty($campaign->getLastLaunched())) ? $campaign->getLastLaunched()->format('m/d/Y H:i:s') : 'N/A'; ?><br/>
+            <strong>Run Status: </strong> <?php echo $campaign->getStatus(); ?><br/>
+            <strong># Of Emails Remaining: </strong> <?php echo $campaign->getRemainingEmails(); ?><br/>
+        </p>
+        <?php endif; ?>
+        <div class="form-inline">
+            <a target="_blank" href="/admin/mailer/email<?php echo !empty($_GET['id']) ? "?campaign={$_GET['id']}" : ''; ?>" class="btn btn-default"><i class="fa fa-plus-circle"></i> Add New Email</a>
+        </div>
+        <h5>Emails On This Campaign</h5>
+        <div class="scrollbox">
+            <?php
+                if (count($emails_on_campaign) > 0)
+                {
+                    echo "<ul class='emails-on-campaign'>";
+                    foreach ($emails_on_campaign as $email)
+                    {
+                        // Get caption of email status
+                        if ($email->isCompleted())
+                        {
+                            $email_status_caption = "Sent";
+                        }
+                        elseif ($email->getScheduledSendTime() instanceof \DateTime)
+                        {
+                            $email_status_caption = "Scheduled for " . $email->getScheduledSendTime()->format('m/d/Y');
+                        }
+                        else
+                        {
+                            $email_status_caption = "Will send on next job run.";
+                        }
+
+                        echo "<li data-id='{$email->getId()}' class='email-on-campaign'><a href='' class='email-on-campaign-remove'><i class='fa fa-remove'></i></a>
+                           <a href='/admin/mailer/email?id={$email->getId()}' target='_blank' class='email-on-campaign-edit'><i class='fa fa-edit'></i></a> {$email->getSubject()} ($email_status_caption)</li>";
+                    }
+                    echo "</ul>";
+                }
+            ?>
+        </div>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>
+
+
+
+
